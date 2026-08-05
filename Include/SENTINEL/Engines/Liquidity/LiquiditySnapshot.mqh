@@ -7,7 +7,7 @@
 #include "LiquidityTypes.mqh"
 
 /// @struct SLiquiditySnapshot
-/// @brief Immutable snapshot object emitted when liquidity state updates. Consumed by downstream engines.
+/// @brief Immutable snapshot object emitted when liquidity state updates with confidence and zone linkage metadata.
 struct SLiquiditySnapshot
 {
    // Versioning & Lineage Metadata
@@ -28,6 +28,10 @@ struct SLiquiditySnapshot
    ENUM_SWEEP_TYPE      sweepDirection;   ///< Bullish, Bearish, Partial, Complete
    double               sweepStrength;    ///< Sweep impact strength (0.0 to 100.0)
 
+   // Confidence & Source Tracking for Decision Engine
+   double               overallConfidence;///< Confidence score (0.0 to 100.0%)
+   string               confidenceSource; ///< Source description (e.g., "Equal Highs + External Swing")
+
    // Counts & Telemetry
    int                  activePoolsCount;
    int                  sweptPoolsCount;
@@ -43,6 +47,8 @@ struct SLiquiditySnapshot
       sequenceNumber        = 0;
       sweepDirection        = SWEEP_NONE;
       sweepStrength         = 0.0;
+      overallConfidence     = 0.0;
+      confidenceSource      = "";
       activePoolsCount      = 0;
       sweptPoolsCount       = 0;
       liquidityQualityScore = 0.0;

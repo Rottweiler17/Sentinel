@@ -28,19 +28,26 @@ public:
       double diffPips = MathAbs(low1.price - low2.price) / (pointVal * 10.0);
       if(diffPips <= m_tolerancePips)
       {
-         outPool.id              = m_nextPoolId++;
-         outPool.type            = LIQUIDITY_TYPE_EQUAL_LOWS;
-         outPool.strength        = LIQUIDITY_STRENGTH_STRONG;
-         outPool.timeframe       = low1.timeframe;
-         outPool.priceLevel      = MathMin(low1.price, low2.price);
-         outPool.upperBound      = outPool.priceLevel + (m_tolerancePips * pointVal * 10.0);
-         outPool.lowerBound      = outPool.priceLevel - (m_tolerancePips * pointVal * 10.0);
-         outPool.touchCount      = 2;
-         outPool.estimatedVolume = 1000.0;
-         outPool.creationTime    = MathMax(low1.time, low2.time);
-         outPool.lastTouchTime   = outPool.creationTime;
-         outPool.isConsumed      = false;
-         outPool.isSwept         = false;
+         outPool.id                  = m_nextPoolId++;
+         outPool.type                = LIQUIDITY_TYPE_EQUAL_LOWS;
+         outPool.strength            = LIQUIDITY_STRENGTH_STRONG;
+         outPool.lifecycleState      = LIQUIDITY_STATE_ACTIVE;
+         outPool.timeframe           = low1.timeframe;
+         outPool.priceLevel          = MathMin(low1.price, low2.price);
+         outPool.upperBound          = outPool.priceLevel + (m_tolerancePips * pointVal * 10.0);
+         outPool.lowerBound          = outPool.priceLevel - (m_tolerancePips * pointVal * 10.0);
+         outPool.touchCount          = 2;
+         outPool.estimatedVolume     = 1000.0;
+         outPool.confidenceScore     = 90.0;
+         outPool.sourceDescription   = "Equal Lows + External Swing";
+         outPool.nearestOrderBlockId = 0;
+         outPool.nearestFVGId        = 0;
+         outPool.nearestSessionHigh  = 0.0;
+         outPool.nearestSessionLow   = 0.0;
+         outPool.creationTime        = MathMax(low1.time, low2.time);
+         outPool.lastTouchTime       = outPool.creationTime;
+         outPool.isConsumed          = false;
+         outPool.isSwept             = false;
          return true;
       }
       return false;

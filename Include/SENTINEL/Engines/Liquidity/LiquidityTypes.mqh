@@ -35,6 +35,17 @@ enum ENUM_LIQUIDITY_STRENGTH
    LIQUIDITY_STRENGTH_INSTITUTIONAL
 };
 
+/// @enum ENUM_LIQUIDITY_LIFECYCLE
+/// @brief Explicit lifecycle state transitions for a liquidity pool object.
+enum ENUM_LIQUIDITY_LIFECYCLE
+{
+   LIQUIDITY_STATE_CREATED = 0,        ///< Newly identified pool
+   LIQUIDITY_STATE_ACTIVE,             ///< Active resting liquidity
+   LIQUIDITY_STATE_SWEPT,              ///< Swept/purged by price wick
+   LIQUIDITY_STATE_CONSUMED,           ///< Fully penetrated / invalidated
+   LIQUIDITY_STATE_EXPIRED             ///< Time/bar count expired
+};
+
 /// @enum ENUM_SWEEP_TYPE
 /// @brief Classification of liquidity sweep/purge events.
 enum ENUM_SWEEP_TYPE
@@ -48,23 +59,33 @@ enum ENUM_SWEEP_TYPE
 };
 
 /// @struct SLiquidityPool
-/// @brief Structural data container for a single liquidity pool or zone.
+/// @brief Structural data container for a single liquidity pool with zone linkage & lifecycle tracking.
 struct SLiquidityPool
 {
-   ulong                   id;
-   ENUM_LIQUIDITY_TYPE     type;
-   ENUM_LIQUIDITY_STRENGTH strength;
-   ENUM_TIMEFRAMES         timeframe;
-   double                  priceLevel;
-   double                  upperBound;
-   double                  lowerBound;
-   int                     touchCount;       ///< Number of times price touched level
-   double                  estimatedVolume;
-   datetime                creationTime;
-   datetime                lastTouchTime;
-   bool                    isConsumed;
-   bool                    isSwept;
-   datetime                consumptionTime;
+   ulong                    id;
+   ENUM_LIQUIDITY_TYPE      type;
+   ENUM_LIQUIDITY_STRENGTH  strength;
+   ENUM_LIQUIDITY_LIFECYCLE lifecycleState;
+   ENUM_TIMEFRAMES          timeframe;
+   double                   priceLevel;
+   double                   upperBound;
+   double                   lowerBound;
+   int                      touchCount;
+   double                   estimatedVolume;
+   double                   confidenceScore;    ///< Confidence score 0.0 to 100.0%
+   string                   sourceDescription;  ///< E.g., "Equal Highs + External Swing + High Volume"
+
+   // Zone Linkage Placeholders for Future Engines
+   ulong                    nearestOrderBlockId;
+   ulong                    nearestFVGId;
+   double                   nearestSessionHigh;
+   double                   nearestSessionLow;
+
+   datetime                 creationTime;
+   datetime                 lastTouchTime;
+   bool                     isConsumed;
+   bool                     isSwept;
+   datetime                 consumptionTime;
 };
 
 /// @struct SLiquiditySweep

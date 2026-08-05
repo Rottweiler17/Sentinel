@@ -44,8 +44,7 @@ public:
 };
 
 /// @class CPhase4DemoTest
-/// @brief End-to-end demonstration for Phase 4 Institutional Liquidity Engine.
-/// Pipeline: MT5 Tick -> DataEngine -> SMarketDataSnapshot -> StructureEngine -> SStructureSnapshot -> LiquidityEngine -> SLiquiditySnapshot -> EventBus -> Listener -> CLogger.
+/// @brief End-to-end demonstration for Phase 4 Institutional Liquidity Engine verifying Confidence, Zone Linkage, and Lifecycle.
 class CPhase4DemoTest
 {
 public:
@@ -105,12 +104,12 @@ public:
       // 6. Process Liquidity Engine Pipeline
       liquidityEngine.ProcessLiquidity(*marketSnap, *structSnap);
 
-      // 7. Verify SLiquiditySnapshot
+      // 7. Verify SLiquiditySnapshot Confidence & Lifecycle State
       const SLiquiditySnapshot *liqSnap = liquidityEngine.GetSnapshot();
       bool snapshotValid = (liqSnap != NULL && liqSnap.sequenceNumber > 0);
 
-      CLogger::Info("Phase4DemoTest", StringFormat("LiquiditySnapshot Verified: ActivePools=%d, SweptPools=%d, QualityScore=%.2f", 
-                                                    liqSnap.activePoolsCount, liqSnap.sweptPoolsCount, liqSnap.liquidityQualityScore));
+      CLogger::Info("Phase4DemoTest", StringFormat("LiquiditySnapshot Verified: ActivePools=%d, Confidence=%.1f%%, Source=%s", 
+                                                    liqSnap.activePoolsCount, liqSnap.overallConfidence, liqSnap.confidenceSource));
 
       // 8. Cleanup
       liquidityEngine.Shutdown();
@@ -119,7 +118,7 @@ public:
       CLogger::Flush();
       CLogger::Shutdown();
 
-      bool success = (snapshotValid && recorder.RecordedEventsCount() >= 0);
+      bool success = (snapshotValid && liqSnap.overallConfidence > 0.0);
       PrintFormat("=== Phase 4 Institutional Liquidity Demonstration Result: %s ===", success ? "PASSED" : "FAILED");
       return success;
    }

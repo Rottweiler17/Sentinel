@@ -15,7 +15,7 @@
 #include "LiquidityEvents.mqh"
 
 /// @class CLiquidityEngine
-/// @brief Master Institutional Liquidity Engine. Single source of truth for all liquidity pools, BSL/SSL, and sweeps.
+/// @brief Master Institutional Liquidity Engine. Single source of truth for all liquidity pools, BSL/SSL, confidence scores, and sweeps.
 class CLiquidityEngine : public CBaseEngine, public IEventListener
 {
 private:
@@ -42,7 +42,6 @@ public:
          return false;
 
       double tolerance = config.GetDouble("liquidity.tolerance_pips", 3.0);
-      // Initialize detector tolerance
 
       if(m_eventBusRef != NULL)
       {
@@ -135,7 +134,7 @@ public:
          }
       }
 
-      // 5. Update LiquiditySnapshot
+      // 5. Update LiquiditySnapshot with confidence metrics
       UpdateSnapshot(marketSnap);
    }
 
@@ -143,7 +142,7 @@ public:
    const SLiquiditySnapshot* GetSnapshot() const { return &m_currentSnapshot; }
 
 private:
-   /// @brief Updates current immutable SLiquiditySnapshot with version tracking.
+   /// @brief Updates current immutable SLiquiditySnapshot with version tracking & confidence scores.
    void UpdateSnapshot(const SMarketDataSnapshot &marketSnap)
    {
       m_snapshotSequence++;
@@ -157,6 +156,18 @@ private:
       // Find nearest BSL and SSL relative to current price
       m_cache.FindNearestBSL(marketSnap.bid, m_currentSnapshot.nearestBSL);
       m_cache.FindNearestSSL(marketSnap.bid, m_currentSnapshot.nearestSSL);
+
+      // Populate confidence metrics for Decision Engine
+      if(m_currentSnapshot.nearestBSL.type != LIQUIDITY_TYPE_NONE)
+      {
+         m_currentSnapshot.overallConfidence = m_currentSnapshot.nearestBSL.confidenceScore;
+         m_currentSnapshot.confidenceSource  = m_currentSnapshot.nearestBSL.sourceDescription;
+      }
+      else
+      {
+         m_currentSnapshot.overallConfidence = 80.0;
+         m_currentSnapshot.confidenceSource  = "Price Structure Base";
+      }
 
       // Latest Sweep information
       SLiquiditySweep latestSweep;

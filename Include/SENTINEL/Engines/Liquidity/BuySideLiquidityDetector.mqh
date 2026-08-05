@@ -20,19 +20,26 @@ public:
    {
       if(swingHigh.type != SWING_TYPE_HIGH) return false;
 
-      outPool.id              = m_nextPoolId++;
-      outPool.type            = LIQUIDITY_TYPE_BUYSIDE;
-      outPool.strength        = LIQUIDITY_STRENGTH_NORMAL;
-      outPool.timeframe       = swingHigh.timeframe;
-      outPool.priceLevel      = swingHigh.price;
-      outPool.upperBound      = swingHigh.price * 1.0005;
-      outPool.lowerBound      = swingHigh.price;
-      outPool.touchCount      = 1;
-      outPool.estimatedVolume = 500.0;
-      outPool.creationTime    = swingHigh.time;
-      outPool.lastTouchTime   = swingHigh.time;
-      outPool.isConsumed      = false;
-      outPool.isSwept         = false;
+      outPool.id                  = m_nextPoolId++;
+      outPool.type                = LIQUIDITY_TYPE_BUYSIDE;
+      outPool.strength            = LIQUIDITY_STRENGTH_NORMAL;
+      outPool.lifecycleState      = LIQUIDITY_STATE_ACTIVE;
+      outPool.timeframe           = swingHigh.timeframe;
+      outPool.priceLevel          = swingHigh.price;
+      outPool.upperBound          = swingHigh.price * 1.0005;
+      outPool.lowerBound          = swingHigh.price;
+      outPool.touchCount          = 1;
+      outPool.estimatedVolume     = 500.0;
+      outPool.confidenceScore     = 85.0;
+      outPool.sourceDescription   = "Swing High BSL";
+      outPool.nearestOrderBlockId = 0;
+      outPool.nearestFVGId        = 0;
+      outPool.nearestSessionHigh  = 0.0;
+      outPool.nearestSessionLow   = 0.0;
+      outPool.creationTime        = swingHigh.time;
+      outPool.lastTouchTime       = swingHigh.time;
+      outPool.isConsumed          = false;
+      outPool.isSwept             = false;
       return true;
    }
 };
