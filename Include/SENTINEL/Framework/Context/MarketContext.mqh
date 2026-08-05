@@ -11,6 +11,7 @@
 #include "../../Engines/Session/SessionSnapshot.mqh"
 #include "../../Engines/State/MarketStateSnapshot.mqh"
 #include "../../Engines/Volume/VolumeSnapshot.mqh"
+#include "../../Engines/OrderFlow/OrderFlowSnapshot.mqh"
 
 /// @struct SMarketContext
 /// @brief Unified, immutable snapshot representing the complete market state at a specific moment.
@@ -30,6 +31,7 @@ struct SMarketContext
    SSessionSnapshot     session;
    SMarketStateSnapshot state;
    SVolumeSnapshot      volume;
+   SOrderFlowSnapshot   orderFlow;
 
    /// @brief Resets all aggregated snapshots to clean zero state.
    void Reset()
@@ -45,5 +47,6 @@ struct SMarketContext
       session.Reset();
       state.Reset();
       volume.Reset();
+      orderFlow.Reset();
    }
 };

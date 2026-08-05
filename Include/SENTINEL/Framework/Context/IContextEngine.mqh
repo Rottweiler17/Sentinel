@@ -19,5 +19,6 @@ public:
                               const SZoneSnapshot &zoneSnap,
                               const SSessionSnapshot &sessionSnap,
                               const SMarketStateSnapshot &stateSnap,
-                              const SVolumeSnapshot &volumeSnap) = 0;
+                              const SVolumeSnapshot &volumeSnap,
+                              const SOrderFlowSnapshot &orderFlowSnap) = 0;
 };

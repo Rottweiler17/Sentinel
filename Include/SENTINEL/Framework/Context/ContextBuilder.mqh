@@ -68,6 +68,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddOrderFlow(const SOrderFlowSnapshot &orderFlow)
+   {
+      m_context.orderFlow = orderFlow;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;
