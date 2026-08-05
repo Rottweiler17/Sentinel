@@ -4,4 +4,4 @@
 //+------------------------------------------------------------------+
 #property strict
 
-#include "../Common/Constants.mqh"
+#include "../Common/Defs.mqh"

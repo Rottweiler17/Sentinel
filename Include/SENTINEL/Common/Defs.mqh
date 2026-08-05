@@ -1,7 +1,9 @@
 //+------------------------------------------------------------------+
-//|                                                   Interfaces.mqh |
+//|                                                         Defs.mqh |
 //|                                                 Project SENTINEL |
 //+------------------------------------------------------------------+
 #property strict
 
-#include "../Common/Interfaces.mqh"
+#include "../Core/Version.mqh"
+#include "../Core/BuildInfo.mqh"
+#include "Constants.mqh"

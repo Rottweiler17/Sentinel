@@ -4,7 +4,7 @@
 //+------------------------------------------------------------------+
 #property strict
 
-// Full Foundation System Include Tree
+// Core Layers
 #include "../Core/Version.mqh"
 #include "../Core/BuildInfo.mqh"
 #include "../Core/Defs.mqh"
@@ -13,14 +13,20 @@
 #include "../Core/BaseEngine.mqh"
 #include "../Core/BaseModule.mqh"
 
+// Common Layer (Contracts & Definitions)
 #include "../Common/Constants.mqh"
+#include "../Common/Defs.mqh"
+#include "../Common/Types.mqh"
+#include "../Common/Interfaces.mqh"
 
+// Utilities Layer (Helper Functions)
 #include "../Utilities/Validation.mqh"
 #include "../Utilities/StringUtils.mqh"
 #include "../Utilities/MathUtils.mqh"
 #include "../Utilities/TimeUtils.mqh"
 #include "../Utilities/ArrayUtils.mqh"
 
+// Infrastructure
 #include "../Logging/LogLevel.mqh"
 #include "../Logging/Logger.mqh"
 #include "../Config/ConfigParam.mqh"

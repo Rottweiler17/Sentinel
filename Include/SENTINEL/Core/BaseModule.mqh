@@ -4,7 +4,7 @@
 //+------------------------------------------------------------------+
 #property strict
 
-#include "Interfaces.mqh"
+#include "../Common/Interfaces.mqh"
 #include "../Logging/Logger.mqh"
 #include "../Config/ConfigEngine.mqh"
 

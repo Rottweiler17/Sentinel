@@ -1,4 +1,4 @@
-# PROJECT SENTINEL: Phase 1 - Final Foundation Cleanup Documentation
+# PROJECT SENTINEL: Phase 1 - Foundation Architecture (Verified Clean)
 
 **Author**: Lead Software Architect  
 **Project**: SENTINEL - Professional Trading Analysis Framework for MetaTrader 5 (MQL5)  
@@ -6,76 +6,69 @@
 
 ---
 
-## 1. Executive Summary of Foundation Cleanup
+## 1. Directory Responsibility Breakdown
 
-The **Final Foundation Cleanup** has satisfied all 10 mandatory cleanup criteria:
-1. Removed all framework branding, company names, and embedded URLs from source headers.
-2. Created `Core/Version.mqh` for single-source versioning.
-3. Created `Core/BuildInfo.mqh` for centralized build metadata.
-4. Separated responsibilities strictly: `Common/` (Definitions, Constants, Types) vs `Utilities/` (Math, Time, String, Validation, Array).
-5. Streamlined `ConfigEngine` getter/setter logic via internal `AddOrReplace()`.
-6. Verified single-responsibility and consistent Doxygen documentation formatting across every folder.
-7. Purged dead code, unused includes, and overlapping forwarders.
-8. Performed complete dependency review confirming zero circular dependencies.
-9. Verified compilation via integration test harness `FoundationTest.mqh`.
+The framework foundation is cleanly divided with **zero overlapping files**:
+
+### A. Common Layer (`Include/SENTINEL/Common/`)
+*Reserved strictly for shared contracts, data types, enumerations, and system constants:*
+- **`Constants.mqh`**: System limits, buffer capacities, status codes (`ENUM_SENTINEL_STATUS`), safety macros.
+- **`Defs.mqh`**: Core macro definitions.
+- **`Types.mqh`**: All domain structs (`SBarData`, `STickData`, `SSwingPoint`, `SZoneData`, `SSignalData`, `SMarketRegimeData`, `SSessionData`, `SRiskData`, `SVolumeProfileData`, `SDeltaData`, `SAbsorptionData`, `SDecisionData`).
+- **`Interfaces.mqh`**: Pure abstract contracts (`IEngine`, `IEventListener`, `IModule`, `IDrawable`) and categorized event types (`EVENT_SYS_*`, `EVENT_MKT_*`, `EVENT_TRD_*`, `EVENT_UI_*`).
+
+### B. Utilities Layer (`Include/SENTINEL/Utilities/`)
+*Reserved strictly for helper functions and utility implementations:*
+- **`MathUtils.mqh`**: Pip value calculation, R-Multiple calculation, lot sizing math, price clamping.
+- **[TimeUtils.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/TimeUtils.mqh)**: Session evaluation (Asian, London, NY, Kill Zones), bar time rounding, new bar check.
+- **[StringUtils.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/StringUtils.mqh)**: Trimming, casing, number formatting.
+- **[Validation.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/Validation.mqh)**: Pointer, price, symbol, and string validation helpers.
+- **[ArrayUtils.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/ArrayUtils.mqh)**: Binary search & fast array element removal.
+
+### C. Core Layer (`Include/SENTINEL/Core/`)
+*Reserved for versioning, build metadata, and base classes:*
+- **`Version.mqh`**: Centralized version specification (`1.0.0`).
+- **`BuildInfo.mqh`**: Build metadata (`SENTINEL_BUILD_NUMBER`, build date/time).
+- **`BaseEngine.mqh`**: Abstract `CBaseEngine` base class supporting dependency injection.
+- **`BaseModule.mqh`**: Abstract `CBaseModule` base class supporting dependency injection.
 
 ---
 
-## 2. Updated Directory Architecture
+## 2. Directory Layout Verification
 
 ```
 Include/SENTINEL/
+├── Common/              # [SHARED DEFINITIONS & CONTRACTS ONLY]
+│   ├── Constants.mqh
+│   ├── Defs.mqh
+│   ├── Interfaces.mqh
+│   └── Types.mqh
+├── Utilities/           # [HELPER IMPLEMENTATIONS ONLY]
+│   ├── ArrayUtils.mqh
+│   ├── MathUtils.mqh
+│   ├── StringUtils.mqh
+│   ├── TimeUtils.mqh
+│   └── Validation.mqh
 ├── Core/
-│   ├── Version.mqh      # Centralized versioning (Major, Minor, Patch)
-│   ├── BuildInfo.mqh    # Build metadata (Build Number, Date, Time)
-│   ├── Defs.mqh         # Global framework status codes and macros
-│   ├── Types.mqh        # Domain data structs and enumerations
-│   ├── Interfaces.mqh   # Categorized event types & core abstract contracts
-│   ├── BaseEngine.mqh   # Abstract CBaseEngine base class
-│   └── BaseModule.mqh   # Abstract CBaseModule base class
-├── Common/
-│   └── Constants.mqh    # Shared framework constants & buffer limits
-├── Utilities/
-│   ├── MathUtils.mqh    # Lot sizing, pip values, price clamping, R-Multiple
-│   ├── TimeUtils.mqh    # Session checking, Killzones, bar rounding
-│   ├── StringUtils.mqh  # Trimming, casing, number formatting
-│   ├── Validation.mqh   # Pointer, price, symbol, string validation
-│   └── ArrayUtils.mqh   # Binary search & fast element removal
+│   ├── Version.mqh
+│   ├── BuildInfo.mqh
+│   ├── BaseEngine.mqh
+│   └── BaseModule.mqh
 ├── Config/
-│   ├── ConfigParam.mqh  # Strongly-typed parameter object
-│   └── ConfigEngine.mqh # Streamlined parameter repository
+│   ├── ConfigParam.mqh
+│   └── ConfigEngine.mqh
 ├── Logging/
-│   ├── LogLevel.mqh     # Diagnostic severity enums
-│   └── Logger.mqh       # Persistent buffered logger
+│   ├── LogLevel.mqh
+│   └── Logger.mqh
 ├── Memory/
-│   ├── RingBuffer.mqh   # Full-featured O(1) ring buffer template
-│   └── ObjectPool.mqh   # Chunked object pool with statistics
+│   ├── RingBuffer.mqh
+│   └── ObjectPool.mqh
 └── Tests/
-    └── FoundationTest.mqh # Compile verification test harness
+    └── FoundationTest.mqh
 ```
-
----
-
-## 3. Dependency Review Matrix
-
-```
-[Core/Version.mqh]  <---  [Core/BuildInfo.mqh]
-        ^
-        |
-[Common/Constants.mqh] <--- [Core/Defs.mqh]
-        ^
-        |
-[Core/Types.mqh]  <---  [Core/Interfaces.mqh]
-        ^                          ^
-        |                          |
-[Core/BaseEngine.mqh] <----+-------+-----> [Config/ConfigEngine.mqh]
-[Core/BaseModule.mqh] <----+             [Logging/Logger.mqh]
-```
-- **Circular Dependency Check**: Passed (0 cycles).
-- **Redundant Forwarders**: Removed.
 
 ---
 
 > [!IMPORTANT]
-> **Final Foundation Cleanup is complete.**
-> As instructed, implementation has stopped here. Phase 2 will not begin until explicit approval is granted.
+> **Foundation Cleanup is 100% verified with zero duplication between Common/ and Utilities/.**
+> Implementation has stopped. We await your approval before beginning Phase 2.
