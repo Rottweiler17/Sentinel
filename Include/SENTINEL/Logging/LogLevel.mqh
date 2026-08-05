@@ -1,12 +1,11 @@
 //+------------------------------------------------------------------+
 //|                                                     LogLevel.mqh |
-//|                                  Copyright 2026, Project SENTINEL |
-//|                                      https://www.sentinel-trade.com |
+//|                                                 Project SENTINEL |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2026, Project SENTINEL"
-#property link      "https://www.sentinel-trade.com"
 #property strict
 
+/// @enum ENUM_LOG_LEVEL
+/// @brief Severity tiers for system diagnostic logging.
 enum ENUM_LOG_LEVEL
 {
    LOG_LEVEL_DEBUG = 0,

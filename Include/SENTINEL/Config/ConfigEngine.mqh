@@ -1,10 +1,7 @@
 //+------------------------------------------------------------------+
 //|                                                 ConfigEngine.mqh |
-//|                                  Copyright 2026, Project SENTINEL |
-//|                                      https://www.sentinel-trade.com |
+//|                                                 Project SENTINEL |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2026, Project SENTINEL"
-#property link      "https://www.sentinel-trade.com"
 #property strict
 
 #include "ConfigParam.mqh"

@@ -1,18 +1,14 @@
 //+------------------------------------------------------------------+
 //|                                                    Constants.mqh |
-//|                                  Copyright 2026, Project SENTINEL |
-//|                                      https://www.sentinel-trade.com |
+//|                                                 Project SENTINEL |
 //+------------------------------------------------------------------+
-#property copyright "Copyright 2026, Project SENTINEL"
-#property link      "https://www.sentinel-trade.com"
 #property strict
 
-/// @file Constants.mqh
-/// @brief Central repository for framework identity, limits, and system-wide default constants.
+#include "../Core/Version.mqh"
+#include "../Core/BuildInfo.mqh"
 
-#define SENTINEL_VERSION               "1.00"
-#define SENTINEL_NAME                  "SENTINEL Framework"
-#define SENTINEL_COPYRIGHT             "Institutional Trading Architecture"
+/// @file Constants.mqh
+/// @brief System limits, capacity defaults, status codes, and memory macros.
 
 #define SENTINEL_DEFAULT_BAR_CAPACITY  5000   ///< Default max bars retained per timeframe
 #define SENTINEL_DEFAULT_TICK_CAPACITY 10000  ///< Default max ticks stored in ring buffer
