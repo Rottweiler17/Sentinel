@@ -17,5 +17,6 @@ public:
                               const SStructureSnapshot &structSnap,
                               const SLiquiditySnapshot &liqSnap,
                               const SZoneSnapshot &zoneSnap,
-                              const SSessionSnapshot &sessionSnap) = 0;
+                              const SSessionSnapshot &sessionSnap,
+                              const SMarketStateSnapshot &stateSnap) = 0;
 };

@@ -56,6 +56,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddState(const SMarketStateSnapshot &state)
+   {
+      m_context.state = state;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;

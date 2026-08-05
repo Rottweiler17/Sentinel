@@ -9,6 +9,7 @@
 #include "../../Engines/Liquidity/LiquiditySnapshot.mqh"
 #include "../Zones/ZoneSnapshot.mqh"
 #include "../../Engines/Session/SessionSnapshot.mqh"
+#include "../../Engines/State/MarketStateSnapshot.mqh"
 
 /// @struct SMarketContext
 /// @brief Unified, immutable snapshot representing the complete market state at a specific moment.
@@ -26,6 +27,7 @@ struct SMarketContext
    SLiquiditySnapshot   liquidity;
    SZoneSnapshot        zones;
    SSessionSnapshot     session;
+   SMarketStateSnapshot state;
 
    /// @brief Resets all aggregated snapshots to clean zero state.
    void Reset()
@@ -39,5 +41,6 @@ struct SMarketContext
       liquidity.Reset();
       zones.Reset();
       session.Reset();
+      state.Reset();
    }
 };

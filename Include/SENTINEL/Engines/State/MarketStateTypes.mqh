@@ -1,0 +1,48 @@
+//+------------------------------------------------------------------+
+//|                                             MarketStateTypes.mqh |
+//|                                                 Project SENTINEL |
+//+------------------------------------------------------------------+
+#property strict
+
+/// @enum ENUM_MARKET_ENVIRONMENT_STATE
+/// @brief Classification of current market environment.
+enum ENUM_MARKET_ENVIRONMENT_STATE
+{
+   STATE_ENV_UNKNOWN = 0,
+   STATE_ENV_TRENDING_BULLISH,
+   STATE_ENV_TRENDING_BEARISH,
+   STATE_ENV_BULLISH_EXPANSION,
+   STATE_ENV_BEARISH_EXPANSION,
+   STATE_ENV_BULLISH_PULLBACK,
+   STATE_ENV_BEARISH_PULLBACK,
+   STATE_ENV_BULLISH_CONTINUATION,
+   STATE_ENV_BEARISH_CONTINUATION,
+   STATE_ENV_BULLISH_EXHAUSTION,
+   STATE_ENV_BEARISH_EXHAUSTION,
+   STATE_ENV_ACCUMULATION,
+   STATE_ENV_DISTRIBUTION,
+   STATE_ENV_COMPRESSION,
+   STATE_ENV_EXPANSION,
+   STATE_ENV_RANGE,
+   STATE_ENV_TRANSITION,
+   STATE_ENV_HIGH_VOLATILITY,
+   STATE_ENV_LOW_VOLATILITY,
+   STATE_ENV_IMPULSE,
+   STATE_ENV_CORRECTION,
+   STATE_ENV_LIQUIDITY_HUNT,
+   STATE_ENV_POST_SWEEP,
+   STATE_ENV_BREAKOUT,
+   STATE_ENV_FALSE_BREAKOUT,
+   STATE_ENV_MEAN_REVERSION,
+   STATE_ENV_RECOVERY
+};
+
+/// @enum ENUM_VOLATILITY_RATING
+/// @brief Categorization of market volatility.
+enum ENUM_VOLATILITY_RATING
+{
+   VOLATILITY_LOW = 0,
+   VOLATILITY_NORMAL,
+   VOLATILITY_HIGH,
+   VOLATILITY_EXTREME
+};
