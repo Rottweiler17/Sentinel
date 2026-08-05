@@ -80,6 +80,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddDecisions(const SDecisionSnapshot &decisions)
+   {
+      m_context.decisions = decisions;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;
