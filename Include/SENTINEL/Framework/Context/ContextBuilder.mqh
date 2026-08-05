@@ -86,6 +86,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddOrderBlocks(const SOrderBlockSnapshot &orderBlocks)
+   {
+      m_context.orderBlocks = orderBlocks;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;

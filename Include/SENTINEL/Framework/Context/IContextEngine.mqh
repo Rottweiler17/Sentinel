@@ -22,5 +22,6 @@ public:
                               const SVolumeSnapshot &volumeSnap,
                               const SOrderFlowSnapshot &orderFlowSnap,
                               const SFeatureSnapshot &featuresSnap,
-                              const SDecisionSnapshot &decisionsSnap) = 0;
+                              const SDecisionSnapshot &decisionsSnap,
+                              const SOrderBlockSnapshot &orderBlocksSnap) = 0;
 };

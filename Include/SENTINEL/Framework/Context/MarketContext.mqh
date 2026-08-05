@@ -14,6 +14,7 @@
 #include "../../Engines/OrderFlow/OrderFlowSnapshot.mqh"
 #include "../../Framework/Features/FeatureSnapshot.mqh"
 #include "../../Framework/Decisions/DecisionSnapshot.mqh"
+#include "../../Engines/OrderBlock/OrderBlockSnapshot.mqh"
 
 /// @struct SMarketContext
 /// @brief Unified, immutable snapshot representing the complete market state at a specific moment.
@@ -36,6 +37,7 @@ struct SMarketContext
    SOrderFlowSnapshot   orderFlow;
    SFeatureSnapshot     features;
    SDecisionSnapshot    decisions;
+   SOrderBlockSnapshot  orderBlocks;
 
    /// @brief Resets all aggregated snapshots to clean zero state.
    void Reset()
@@ -54,5 +56,6 @@ struct SMarketContext
       orderFlow.Reset();
       features.Reset();
       decisions.Reset();
+      orderBlocks.Reset();
    }
 };
