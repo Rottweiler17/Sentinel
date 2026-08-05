@@ -20,5 +20,6 @@ public:
                               const SSessionSnapshot &sessionSnap,
                               const SMarketStateSnapshot &stateSnap,
                               const SVolumeSnapshot &volumeSnap,
-                              const SOrderFlowSnapshot &orderFlowSnap) = 0;
+                              const SOrderFlowSnapshot &orderFlowSnap,
+                              const SFeatureSnapshot &featuresSnap) = 0;
 };

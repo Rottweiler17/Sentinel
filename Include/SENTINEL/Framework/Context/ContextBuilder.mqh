@@ -74,6 +74,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddFeatures(const SFeatureSnapshot &features)
+   {
+      m_context.features = features;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;

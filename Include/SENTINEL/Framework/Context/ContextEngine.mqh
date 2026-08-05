@@ -53,7 +53,8 @@ public:
                               const SSessionSnapshot &sessionSnap,
                               const SMarketStateSnapshot &stateSnap,
                               const SVolumeSnapshot &volumeSnap,
-                              const SOrderFlowSnapshot &orderFlowSnap) override
+                              const SOrderFlowSnapshot &orderFlowSnap,
+                              const SFeatureSnapshot &featuresSnap) override
    {
       if(!m_isEnabled) return;
 
@@ -70,6 +71,7 @@ public:
                            .AddState(stateSnap)
                            .AddVolume(volumeSnap)
                            .AddOrderFlow(orderFlowSnap)
+                           .AddFeatures(featuresSnap)
                            .Build();
 
       // Validate context consistency
