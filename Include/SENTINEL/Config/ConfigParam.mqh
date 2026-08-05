@@ -7,6 +7,8 @@
 #property link      "https://www.sentinel-trade.com"
 #property strict
 
+#include <Object.mqh>
+
 enum ENUM_PARAM_TYPE
 {
    PARAM_TYPE_INT = 0,
@@ -15,7 +17,7 @@ enum ENUM_PARAM_TYPE
    PARAM_TYPE_BOOL
 };
 
-class CConfigParam
+class CConfigParam : public CObject
 {
 private:
    string          m_key;

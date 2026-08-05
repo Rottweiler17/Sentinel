@@ -10,7 +10,7 @@
 #include "Defs.mqh"
 
 //+------------------------------------------------------------------+
-//| Structural Enums                                                |
+//| Core Enumerations                                               |
 //+------------------------------------------------------------------+
 enum ENUM_SWING_TYPE
 {
@@ -39,6 +39,28 @@ enum ENUM_SIGNAL_TYPE
    SIGNAL_SELL,
    SIGNAL_CLOSE_BUY,
    SIGNAL_CLOSE_SELL
+};
+
+enum ENUM_REGIME_TYPE
+{
+   REGIME_UNKNOWN = 0,
+   REGIME_BULLISH_TREND,
+   REGIME_BEARISH_TREND,
+   REGIME_RANGING,
+   REGIME_EXPANSION,
+   REGIME_COMPRESSION,
+   REGIME_HIGH_VOLATILITY,
+   REGIME_LOW_VOLATILITY
+};
+
+enum ENUM_SESSION_TYPE
+{
+   SESSION_NONE = 0,
+   SESSION_ASIAN,
+   SESSION_LONDON,
+   SESSION_NEW_YORK,
+   SESSION_LONDON_KILLZONE,
+   SESSION_NY_KILLZONE
 };
 
 //+------------------------------------------------------------------+
@@ -106,4 +128,74 @@ struct SSignalData
    double           takeProfit;
    double           confidenceScore;
    string           sourceModule;
+};
+
+struct SMarketRegimeData
+{
+   ENUM_REGIME_TYPE primaryRegime;
+   ENUM_REGIME_TYPE volatilityRegime;
+   double           atrValue;
+   double           adxValue;
+   double           trendStrength; // 0.0 to 100.0
+   datetime         lastUpdated;
+};
+
+struct SSessionData
+{
+   ENUM_SESSION_TYPE currentSession;
+   bool              isKillzoneActive;
+   double            openingRangeHigh;
+   double            openingRangeLow;
+   double            pdh; // Previous Day High
+   double            pdl; // Previous Day Low
+   double            pwh; // Previous Week High
+   double            pwl; // Previous Week Low
+   double            pmh; // Previous Month High
+   double            pml; // Previous Month Low
+};
+
+struct SRiskData
+{
+   double accountBalance;
+   double riskPercent;
+   double maxDrawdownLimit;
+   double calculatedLotSize;
+   double stopLossPips;
+   double takeProfitPips;
+   double expectedRMultiple;
+   double breakEvenPrice;
+};
+
+struct SVolumeProfileData
+{
+   double pocPrice;  // Point of Control
+   double vahPrice;  // Value Area High
+   double valPrice;  // Value Area Low
+   double totalVolume;
+};
+
+struct SDeltaData
+{
+   double buyVolume;
+   double sellVolume;
+   double cumulativeDelta;
+   double deltaImbalancePercent;
+};
+
+struct SAbsorptionData
+{
+   double   priceLevel;
+   double   absorbedVolume;
+   datetime detectionTime;
+   bool     isBullishAbsorption;
+};
+
+struct SDecisionData
+{
+   ENUM_SIGNAL_TYPE recommendedAction;
+   double           confidenceScore;   // 0.0 to 100.0
+   double           confluenceRating;  // 0.0 to 10.0
+   bool             regimeApproved;
+   bool             riskApproved;
+   string           decisionReason;
 };

@@ -31,7 +31,7 @@ interface IEngine
 };
 
 //+------------------------------------------------------------------+
-//| Event Struct & Interface: IEventListener                         |
+//| Event Types & Interface: IEventListener                          |
 //+------------------------------------------------------------------+
 enum ENUM_SENTINEL_EVENT_TYPE
 {
@@ -44,8 +44,14 @@ enum ENUM_SENTINEL_EVENT_TYPE
    EVENT_ZONE_CREATED,
    EVENT_ZONE_MITIGATED,
    EVENT_LIQUIDITY_SWEEP,
+   EVENT_VOLUME_PROFILE_UPDATE,
    EVENT_VWAP_UPDATE,
+   EVENT_DELTA_FLUSH,
+   EVENT_ABSORPTION_DETECTED,
+   EVENT_SESSION_CHANGE,
+   EVENT_REGIME_CHANGE,
    EVENT_CONFLUENCE_SCORE,
+   EVENT_DECISION_READY,
    EVENT_SIGNAL_GENERATED,
    EVENT_ALERT_TRIGGERED
 };

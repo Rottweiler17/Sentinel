@@ -45,7 +45,7 @@ public:
       if(index < 0 || index >= m_count)
          return false;
 
-      // index 0 is most recent item added
+      // Index 0 is the most recently pushed element
       int actualIndex = (m_head - 1 - index + m_capacity * 2) % m_capacity;
       outItem = m_buffer[actualIndex];
       return true;
@@ -53,9 +53,10 @@ public:
 
    int Size() const { return m_count; }
    int Capacity() const { return m_capacity; }
+
    void Clear()
    {
-      m_head = 0;
+      m_head  = 0;
       m_count = 0;
    }
 };
