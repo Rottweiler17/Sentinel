@@ -12,11 +12,11 @@
 #include "LiquidityCache.mqh"
 #include "LiquidityDetector.mqh"
 #include "LiquidityStatistics.mqh"
-#include "LiquidityEvents.mqh"
+#include "ILiquidityEngine.mqh"
 
 /// @class CLiquidityEngine
 /// @brief Master Institutional Liquidity Engine. Single source of truth for all liquidity pools, BSL/SSL, confidence scores, and sweeps.
-class CLiquidityEngine : public CBaseEngine, public IEventListener
+class CLiquidityEngine : public CBaseEngine, public ILiquidityEngine
 {
 private:
    CLiquidityDetector   m_detector;

@@ -16,11 +16,11 @@
 #include "CHOCHDetector.mqh"
 #include "MarketStateMachine.mqh"
 #include "StructureStatistics.mqh"
-#include "StructureEvents.mqh"
+#include "IStructureEngine.mqh"
 
 /// @class CStructureEngine
 /// @brief Master Market Structure Engine. Single source of truth for swings, BOS, CHOCH, market trend, and state machine transitions.
-class CStructureEngine : public CBaseEngine, public IEventListener
+class CStructureEngine : public CBaseEngine, public IStructureEngine
 {
 private:
    CSwingDetector              m_swingDetector;

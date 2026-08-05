@@ -16,11 +16,11 @@
 #include "ZoneManager.mqh"
 #include "ZoneLifecycleManager.mqh"
 #include "ZoneStatistics.mqh"
-#include "ZoneConfiguration.mqh"
+#include "IZoneEngine.mqh"
 
 /// @class CZoneEngine
 /// @brief Master Generic Zone Framework Engine. Central foundation for every price zone concept inside SENTINEL.
-class CZoneEngine : public CBaseEngine, public IEventListener
+class CZoneEngine : public CBaseEngine, public IZoneEngine
 {
 private:
    CZoneConfiguration    m_config;
