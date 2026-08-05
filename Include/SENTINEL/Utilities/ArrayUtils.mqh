@@ -7,9 +7,16 @@
 #property link      "https://www.sentinel-trade.com"
 #property strict
 
+/// @class CArrayUtils
+/// @brief High-performance template utilities for array binary search and element removal.
 class CArrayUtils
 {
 public:
+   /// @brief Performs binary search on an ascending sorted array.
+   /// @tparam T Element type.
+   /// @param arr Array to search.
+   /// @param value Target value.
+   /// @return Index if found, -1 if not found.
    template<typename T>
    static int BinarySearchAscending(const T &arr[], const T value)
    {
@@ -29,6 +36,10 @@ public:
       return -1;
    }
 
+   /// @brief Performs fast element removal without preserving array ordering (swaps with last element).
+   /// @tparam T Element type.
+   /// @param arr Array to modify.
+   /// @param index Target index to remove.
    template<typename T>
    static void FastRemove(T &arr[], int index)
    {

@@ -1,81 +1,67 @@
-# PROJECT SENTINEL: Phase 1 - Foundation Documentation
+# PROJECT SENTINEL: Phase 1 - Refined Production Foundation
 
 **Author**: Lead Software Architect  
 **Project**: SENTINEL - Professional Trading Analysis Framework for MetaTrader 5 (MQL5)  
-**Status**: SAVED & COMPLETED (2026-08-05)  
+**Status**: REFINED & COMPLETED (2026-08-05)  
 
 ---
 
-## 1. Executive Summary
+## 1. Executive Summary of Foundation Refinements
 
-Phase 1 establishes the production-quality foundation for **Project SENTINEL**. It provides the core type definitions, interfaces, memory managers, diagnostic logging system, parameter repository, abstract base classes, and mathematical/time/array utility libraries.
-
-No strategy logic (liquidity, Order Blocks, FVGs, Signals, or Drawing code) is included in Phase 1.
+The **Foundation Refinement Milestone** has completed all 10 mandatory improvements. All 18 foundation header files adhere strictly to Clean Architecture, SOLID principles, Doxygen documentation standards, and zero trading/strategy logic.
 
 ---
 
-## 2. Directory Layout Established
+## 2. Refinement Tasks Completed
+
+| # | Required Refinement | Implementation Details | Status |
+| :-: | :--- | :--- | :---: |
+| **1** | **Introduce `Common/` Layer** | Created `Constants.mqh`, `Validation.mqh`, `StringUtils.mqh`, `MathUtils.mqh`, `TimeUtils.mqh`. | COMPLETED |
+| **2** | **`CRingBuffer` Enhancements** | Added `Peek()`, `Front()`, `Back()`, `IsEmpty()`, `IsFull()`, `Reserve()`, and optional `overwriteMode`. | COMPLETED |
+| **3** | **`CObjectPool` Enhancements**| Implemented chunked expansion (`m_chunkSize = 32`), `ActiveCount()`, `AvailableCount()`, `Capacity()`, `PeakUsage()`. | COMPLETED |
+| **4** | **`CLogger` Streamlining** | Persistent file handle, buffered logging, explicit `Flush()`, and flush on `Shutdown()`. | COMPLETED |
+| **5** | **`CConfigEngine` Refactoring**| Streamlined parameter storage with internal `AddOrReplace()` helper while keeping clean `SetInt`/`SetDouble`/`SetString`/`SetBool` API. | COMPLETED |
+| **6** | **Dependency Injection** | Refactored `CBaseEngine` & `CBaseModule` to receive `CConfigEngine*` and `CEventBus*` dependencies explicitly. | COMPLETED |
+| **7** | **Categorized Events** | Structured events into System (`EVENT_SYS_*`), Market (`EVENT_MKT_*`), Trading (`EVENT_TRD_*`), and UI (`EVENT_UI_*`). | COMPLETED |
+| **8** | **`DecisionEngine` Naming** | Renamed all ProbabilityEngine references to `DecisionEngine` / `SDecisionData`. | COMPLETED |
+| **9** | **Complete Doxygen Docs** | Added Doxygen `///` comments across all 18 foundation header files and methods. | COMPLETED |
+| **10**| **Compile Verification** | Created `FoundationTest.mqh` verifying zero circular dependencies or syntax warnings. | COMPLETED |
+
+---
+
+## 3. Directory Layout (Refined)
 
 ```
 Include/SENTINEL/
+├── Common/
+│   ├── Constants.mqh    # Versioning, status codes, limits, safety macros
+│   ├── Validation.mqh   # Pointer, price, symbol, string validation
+│   ├── StringUtils.mqh  # Formatting, trimming, upper/lower conversion
+│   ├── MathUtils.mqh    # Pip value, position sizing, R-Multiple, clamping
+│   └── TimeUtils.mqh    # Session checking, Killzones, bar rounding
 ├── Core/
-│   ├── Defs.mqh        # Framework macros, constants, and status codes
-│   ├── Types.mqh       # Domain data structs and enumerations
-│   ├── Interfaces.mqh   # Pure abstract interfaces & event containers
-│   ├── BaseEngine.mqh   # Abstract CBaseEngine implementation
-│   └── BaseModule.mqh   # Abstract CBaseModule implementation
+│   ├── Defs.mqh        # Core system macros & definitions
+│   ├── Types.mqh       # Domain data structs & enums
+│   ├── Interfaces.mqh   # Categorized events & pure abstract interfaces
+│   ├── BaseEngine.mqh   # Abstract CBaseEngine with dependency injection
+│   └── BaseModule.mqh   # Abstract CBaseModule with dependency injection
 ├── Config/
-│   ├── ConfigParam.mqh  # Parameter key-value container
-│   └── ConfigEngine.mqh # Central setting store & manager
+│   ├── ConfigParam.mqh  # Strongly-typed parameter object
+│   └── ConfigEngine.mqh # Streamlined parameter repository
 ├── Logging/
-│   ├── LogLevel.mqh     # Severity enums (DEBUG, INFO, WARN, ERROR)
-│   └── Logger.mqh       # Static non-blocking CLogger
+│   ├── LogLevel.mqh     # Severity enums
+│   └── Logger.mqh       # Persistent buffered diagnostic logger
 ├── Memory/
-│   ├── RingBuffer.mqh   # Generic O(1) zero-allocation ring buffer template
-│   └── ObjectPool.mqh   # Recyclable object container pool
-└── Utilities/
-    ├── MathUtils.mqh    # Mathematical calculations & lot sizing
-    ├── TimeUtils.mqh    # Session window detection & bar time alignment
-    └── ArrayUtils.mqh   # Template binary search & fast removal
+│   ├── RingBuffer.mqh   # Full-featured O(1) ring buffer template
+│   └── ObjectPool.mqh   # Chunked object pool with statistics
+├── Utilities/
+│   └── ArrayUtils.mqh   # Binary search & fast element removal
+└── Tests/
+    └── FoundationTest.mqh # Compile verification test harness
 ```
-
----
-
-## 3. Implemented Components
-
-### Core (`Include/SENTINEL/Core/`)
-- **[Defs.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Core/Defs.mqh)**: Defines `SENTINEL_VERSION`, default buffer capacities, return status enum (`ENUM_SENTINEL_STATUS`), and pointer safety macros (`SAFE_DELETE`, `IS_VALID_POINTER`).
-- **[Types.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Core/Types.mqh)**: Contains structs (`SBarData`, `STickData`, `SSwingPoint`, `SZoneData`, `SSignalData`, `SMarketRegimeData`, `SSessionData`, `SRiskData`, `SVolumeProfileData`, `SDeltaData`, `SAbsorptionData`, `SDecisionData`) and enums (`ENUM_SWING_TYPE`, `ENUM_ZONE_TYPE`, `ENUM_SIGNAL_TYPE`, `ENUM_REGIME_TYPE`, `ENUM_SESSION_TYPE`).
-- **[Interfaces.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Core/Interfaces.mqh)**: Defines pure abstract interfaces (`IEngine`, `IEventListener`, `IModule`, `IDrawable`) and event model `SSentinelEvent`.
-- **[BaseEngine.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Core/BaseEngine.mqh)**: Abstract base class `CBaseEngine` implementing standard `IEngine` state management.
-- **[BaseModule.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Core/BaseModule.mqh)**: Abstract base class `CBaseModule` implementing standard `IModule` plugin infrastructure.
-
-### Config (`Include/SENTINEL/Config/`)
-- **[ConfigParam.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Config/ConfigParam.mqh)**: Strongly-typed key-value parameter container `CConfigParam` extending `CObject`.
-- **[ConfigEngine.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Config/ConfigEngine.mqh)**: Central configuration store `CConfigEngine` managing parameters safely.
-
-### Logging (`Include/SENTINEL/Logging/`)
-- **[LogLevel.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Logging/LogLevel.mqh)**: Enumeration of log levels (`LOG_LEVEL_DEBUG`, `LOG_LEVEL_INFO`, `LOG_LEVEL_WARN`, `LOG_LEVEL_ERROR`).
-- **[Logger.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Logging/Logger.mqh)**: Static non-blocking diagnostic logger `CLogger` outputting to MT5 terminal and disk logs (`MQL5/Files/SENTINEL/logs/`).
-
-### Memory (`Include/SENTINEL/Memory/`)
-- **[RingBuffer.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Memory/RingBuffer.mqh)**: Generic template `CRingBuffer<T>` offering $O(1)$ push operations and indexed access with zero dynamic heap reallocations.
-- **[ObjectPool.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Memory/ObjectPool.mqh)**: Generic template `CObjectPool<T>` managing recyclable objects to prevent dynamic array fragmentation.
-
-### Utilities (`Include/SENTINEL/Utilities/`)
-- **[MathUtils.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/MathUtils.mqh)**: Pure mathematical utilities including pip calculation, R-Multiple calculation, price clamping, and lot sizing.
-- **[TimeUtils.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/TimeUtils.mqh)**: Session window detection (Asian, London, NY, Kill Zones), bar time rounding, and new-bar detection.
-- **[ArrayUtils.mqh](file:///d:/Trading/Project%20Sentinel/Include/SENTINEL/Utilities/ArrayUtils.mqh)**: Template binary search and fast element removal functions.
-
----
-
-## 4. Phase Verification Status
-
-- All 13 foundation headers compile cleanly with strict standard library includes.
-- Low coupling and high cohesion verified across all interfaces.
-- Zero business logic / strategy code included.
 
 ---
 
 > [!IMPORTANT]
-> **Phase 1 Foundation is saved and ready for production use.**
+> **Foundation Refinement Milestone is complete.**
+> As instructed, implementation has stopped here. We await your approval before beginning Phase 2 (Event Bus & Data Core).

@@ -7,11 +7,10 @@
 #property link      "https://www.sentinel-trade.com"
 #property strict
 
-#include "Defs.mqh"
+#include "../Common/Constants.mqh"
 
-//+------------------------------------------------------------------+
-//| Core Enumerations                                               |
-//+------------------------------------------------------------------+
+/// @enum ENUM_SWING_TYPE
+/// @brief Identifies swing structural points.
 enum ENUM_SWING_TYPE
 {
    SWING_TYPE_NONE = 0,
@@ -19,6 +18,8 @@ enum ENUM_SWING_TYPE
    SWING_TYPE_LOW
 };
 
+/// @enum ENUM_ZONE_TYPE
+/// @brief Identifies Order Block, FVG, Liquidity, and Supply/Demand zone types.
 enum ENUM_ZONE_TYPE
 {
    ZONE_TYPE_NONE = 0,
@@ -32,6 +33,8 @@ enum ENUM_ZONE_TYPE
    ZONE_TYPE_DEMAND
 };
 
+/// @enum ENUM_SIGNAL_TYPE
+/// @brief Actionable trade setup signal direction.
 enum ENUM_SIGNAL_TYPE
 {
    SIGNAL_NONE = 0,
@@ -41,6 +44,8 @@ enum ENUM_SIGNAL_TYPE
    SIGNAL_CLOSE_SELL
 };
 
+/// @enum ENUM_REGIME_TYPE
+/// @brief Market condition and volatility classification.
 enum ENUM_REGIME_TYPE
 {
    REGIME_UNKNOWN = 0,
@@ -53,6 +58,8 @@ enum ENUM_REGIME_TYPE
    REGIME_LOW_VOLATILITY
 };
 
+/// @enum ENUM_SESSION_TYPE
+/// @brief Trading session windows and Killzone periods.
 enum ENUM_SESSION_TYPE
 {
    SESSION_NONE = 0,
@@ -63,9 +70,8 @@ enum ENUM_SESSION_TYPE
    SESSION_NY_KILLZONE
 };
 
-//+------------------------------------------------------------------+
-//| Market Data Structs                                             |
-//+------------------------------------------------------------------+
+/// @struct SBarData
+/// @brief Price, volume, and spread metrics for a single OHLC candle.
 struct SBarData
 {
    datetime time;
@@ -78,6 +84,8 @@ struct SBarData
    long     real_volume;
 };
 
+/// @struct STickData
+/// @brief Real-time tick data wrapper with microsecond precision.
 struct STickData
 {
    datetime time;
@@ -90,6 +98,8 @@ struct STickData
    double   volume_real;
 };
 
+/// @struct SSwingPoint
+/// @brief Identified swing high or swing low structural pivot point.
 struct SSwingPoint
 {
    ulong           id;
@@ -102,6 +112,8 @@ struct SSwingPoint
    datetime        breakTime;
 };
 
+/// @struct SZoneData
+/// @brief Order Block, FVG, or Supply/Demand zone boundary data.
 struct SZoneData
 {
    ulong           id;
@@ -116,6 +128,8 @@ struct SZoneData
    double          strengthScore;
 };
 
+/// @struct SSignalData
+/// @brief Actionable setup signal emitted by SignalEngine.
 struct SSignalData
 {
    ulong            id;
@@ -130,30 +144,36 @@ struct SSignalData
    string           sourceModule;
 };
 
+/// @struct SMarketRegimeData
+/// @brief State payload emitted by MarketRegimeEngine.
 struct SMarketRegimeData
 {
    ENUM_REGIME_TYPE primaryRegime;
    ENUM_REGIME_TYPE volatilityRegime;
    double           atrValue;
    double           adxValue;
-   double           trendStrength; // 0.0 to 100.0
+   double           trendStrength;
    datetime         lastUpdated;
 };
 
+/// @struct SSessionData
+/// @brief State payload emitted by SessionEngine.
 struct SSessionData
 {
    ENUM_SESSION_TYPE currentSession;
    bool              isKillzoneActive;
    double            openingRangeHigh;
    double            openingRangeLow;
-   double            pdh; // Previous Day High
-   double            pdl; // Previous Day Low
-   double            pwh; // Previous Week High
-   double            pwl; // Previous Week Low
-   double            pmh; // Previous Month High
-   double            pml; // Previous Month Low
+   double            pdh;
+   double            pdl;
+   double            pwh;
+   double            pwl;
+   double            pmh;
+   double            pml;
 };
 
+/// @struct SRiskData
+/// @brief Position sizing and risk payload emitted by RiskEngine.
 struct SRiskData
 {
    double accountBalance;
@@ -166,14 +186,18 @@ struct SRiskData
    double breakEvenPrice;
 };
 
+/// @struct SVolumeProfileData
+/// @brief Value area and POC payload emitted by VolumeProfileEngine.
 struct SVolumeProfileData
 {
-   double pocPrice;  // Point of Control
-   double vahPrice;  // Value Area High
-   double valPrice;  // Value Area Low
+   double pocPrice;
+   double vahPrice;
+   double valPrice;
    double totalVolume;
 };
 
+/// @struct SDeltaData
+/// @brief Buyer vs seller volume imbalance emitted by DeltaEngine.
 struct SDeltaData
 {
    double buyVolume;
@@ -182,6 +206,8 @@ struct SDeltaData
    double deltaImbalancePercent;
 };
 
+/// @struct SAbsorptionData
+/// @brief Passive volume barrier detection payload emitted by AbsorptionEngine.
 struct SAbsorptionData
 {
    double   priceLevel;
@@ -190,11 +216,13 @@ struct SAbsorptionData
    bool     isBullishAbsorption;
 };
 
+/// @struct SDecisionData
+/// @brief Quantitative execution decision payload emitted by DecisionEngine.
 struct SDecisionData
 {
    ENUM_SIGNAL_TYPE recommendedAction;
-   double           confidenceScore;   // 0.0 to 100.0
-   double           confluenceRating;  // 0.0 to 10.0
+   double           confidenceScore;
+   double           confluenceRating;
    bool             regimeApproved;
    bool             riskApproved;
    string           decisionReason;
