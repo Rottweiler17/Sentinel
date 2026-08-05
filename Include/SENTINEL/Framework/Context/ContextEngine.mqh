@@ -51,7 +51,8 @@ public:
                               const SLiquiditySnapshot &liqSnap,
                               const SZoneSnapshot &zoneSnap,
                               const SSessionSnapshot &sessionSnap,
-                              const SMarketStateSnapshot &stateSnap) override
+                              const SMarketStateSnapshot &stateSnap,
+                              const SVolumeSnapshot &volumeSnap) override
    {
       if(!m_isEnabled) return;
 
@@ -66,6 +67,7 @@ public:
                            .AddZones(zoneSnap)
                            .AddSession(sessionSnap)
                            .AddState(stateSnap)
+                           .AddVolume(volumeSnap)
                            .Build();
 
       // Validate context consistency

@@ -62,6 +62,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddVolume(const SVolumeSnapshot &volume)
+   {
+      m_context.volume = volume;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;

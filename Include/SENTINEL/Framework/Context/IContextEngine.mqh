@@ -18,5 +18,6 @@ public:
                               const SLiquiditySnapshot &liqSnap,
                               const SZoneSnapshot &zoneSnap,
                               const SSessionSnapshot &sessionSnap,
-                              const SMarketStateSnapshot &stateSnap) = 0;
+                              const SMarketStateSnapshot &stateSnap,
+                              const SVolumeSnapshot &volumeSnap) = 0;
 };
