@@ -49,7 +49,8 @@ public:
    virtual void UpdateContext(const SMarketDataSnapshot &marketSnap,
                               const SStructureSnapshot &structSnap,
                               const SLiquiditySnapshot &liqSnap,
-                              const SZoneSnapshot &zoneSnap) override
+                              const SZoneSnapshot &zoneSnap,
+                              const SSessionSnapshot &sessionSnap) override
    {
       if(!m_isEnabled) return;
 
@@ -62,6 +63,7 @@ public:
                            .AddStructure(structSnap)
                            .AddLiquidity(liqSnap)
                            .AddZones(zoneSnap)
+                           .AddSession(sessionSnap)
                            .Build();
 
       // Validate context consistency

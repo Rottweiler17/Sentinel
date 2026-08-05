@@ -16,5 +16,6 @@ public:
    virtual void UpdateContext(const SMarketDataSnapshot &marketSnap,
                               const SStructureSnapshot &structSnap,
                               const SLiquiditySnapshot &liqSnap,
-                              const SZoneSnapshot &zoneSnap) = 0;
+                              const SZoneSnapshot &zoneSnap,
+                              const SSessionSnapshot &sessionSnap) = 0;
 };

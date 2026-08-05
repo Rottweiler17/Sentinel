@@ -50,6 +50,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddSession(const SSessionSnapshot &session)
+   {
+      m_context.session = session;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;
