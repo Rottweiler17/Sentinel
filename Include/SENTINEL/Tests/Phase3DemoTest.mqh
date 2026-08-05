@@ -6,7 +6,9 @@
 
 #include "../Common/Interfaces.mqh"
 #include "../Events/EventBus.mqh"
+#include "../Events/EventRecorder.mqh"
 #include "../Data/DataEngine.mqh"
+#include "../Data/SnapshotHistory.mqh"
 #include "../Engines/Structure/StructureEngine.mqh"
 #include "../Logging/Logger.mqh"
 
@@ -50,8 +52,7 @@ public:
 };
 
 /// @class CPhase3DemoTest
-/// @brief End-to-end demonstration for Phase 3 Market Structure Engine.
-/// Flow: MT5 Tick -> DataEngine -> SMarketDataSnapshot -> StructureEngine -> SStructureSnapshot -> EventBus -> CStructureTestListener -> CLogger.
+/// @brief End-to-end demonstration for Phase 3 Market Structure Engine including State Machine, Event Replay, and Snapshot History.
 class CPhase3DemoTest
 {
 public:
@@ -68,11 +69,16 @@ public:
 
       CEventBus bus;
       CStructureTestListener listener;
+      CEventRecorder recorder;
+      CSnapshotHistory history;
 
-      // 2. Subscribe Listener to Structure Events
+      // 2. Subscribe Listener & Event Recorder
       bus.Subscribe(EVENT_MKT_SWING_FOUND, &listener);
       bus.Subscribe(EVENT_MKT_BOS, &listener);
       bus.Subscribe(EVENT_MKT_CHOCH, &listener);
+      bus.Subscribe(EVENT_MKT_SWING_FOUND, &recorder);
+      bus.Subscribe(EVENT_MKT_BOS, &recorder);
+      bus.Subscribe(EVENT_MKT_CHOCH, &recorder);
 
       // 3. Initialize Engines
       CDataEngine dataEngine;
@@ -93,26 +99,26 @@ public:
 
       dataEngine.OnTick(tick);
       const SMarketDataSnapshot *marketSnap = dataEngine.GetSnapshot();
+      history.AddMarketSnapshot(*marketSnap);
 
-      // 5. Register Swings & Process Structure
-      SBarData bar1; bar1.time = tick.time - 300; bar1.high = 1.1050; bar1.low = 1.0950; bar1.open = 1.0960; bar1.close = 1.1040;
-      SBarData bar2; bar2.time = tick.time - 200; bar2.high = 1.1100; bar2.low = 1.0980; bar2.open = 1.1000; bar2.close = 1.1090;
-
+      // 5. Register Swings & Process Structure with State Machine
       SSwingPoint swingLow1;  swingLow1.id = 1; swingLow1.price = 1.0950; swingLow1.type = SWING_TYPE_LOW;  swingLow1.time = tick.time - 300; swingLow1.timeframe = PERIOD_M5;
       SSwingPoint swingHigh1; swingHigh1.id = 2; swingHigh1.price = 1.1100; swingHigh1.type = SWING_TYPE_HIGH; swingHigh1.time = tick.time - 200; swingHigh1.timeframe = PERIOD_M5;
 
       structureEngine.RegisterSwing(swingLow1);
       structureEngine.RegisterSwing(swingHigh1);
-
-      // Process structure with market snapshot
       structureEngine.ProcessStructure(*marketSnap);
 
-      // 6. Verify StructureSnapshot
       const SStructureSnapshot *structSnap = structureEngine.GetSnapshot();
-      bool snapshotValid = (structSnap != NULL && structSnap.latestSwingHigh.price == 1.1100);
+      history.AddStructureSnapshot(*structSnap);
 
-      CLogger::Info("Phase3DemoTest", StringFormat("StructureSnapshot Verified: Latest High=%.5f, Latest Low=%.5f", 
-                                                    structSnap.latestSwingHigh.price, structSnap.latestSwingLow.price));
+      bool snapshotValid = (structSnap != NULL && structSnap.latestSwingHigh.price == 1.1100 && structSnap.sequenceNumber > 0);
+
+      CLogger::Info("Phase3DemoTest", StringFormat("Snapshot Versioning Verified: SeqNum=%d, State=%d, RecordedEvents=%d", 
+                                                    structSnap.sequenceNumber, structSnap.currentState, recorder.RecordedEventsCount()));
+
+      // 6. Test Event Replay
+      recorder.ReplayEvents(&listener);
 
       // 7. Cleanup
       structureEngine.Shutdown();
@@ -120,7 +126,7 @@ public:
       CLogger::Flush();
       CLogger::Shutdown();
 
-      bool success = (listener.SwingEvents() >= 2 && snapshotValid);
+      bool success = (listener.SwingEvents() >= 2 && snapshotValid && history.StructureSnapshotCount() > 0);
       PrintFormat("=== Phase 3 Market Structure Demonstration Result: %s ===", success ? "PASSED" : "FAILED");
       return success;
    }

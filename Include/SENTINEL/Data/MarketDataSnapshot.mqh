@@ -8,9 +8,14 @@
 #include "../Common/Constants.mqh"
 
 /// @struct SMarketDataSnapshot
-/// @brief Immutable complete market state snapshot generated once per OnTick().
+/// @brief Immutable complete market state snapshot generated once per OnTick() with version tracking.
 struct SMarketDataSnapshot
 {
+   // Snapshot Versioning & Lineage Metadata
+   ulong             snapshotId;       ///< Unique identifier for this snapshot
+   ulong             parentId;         ///< Identifier of previous snapshot
+   ulong             sequenceNumber;   ///< Monotonically increasing tick sequence number
+
    // Tick & Price Details
    STickData         currentTick;
    double            bid;
@@ -42,6 +47,9 @@ struct SMarketDataSnapshot
    /// @brief Resets all snapshot fields to clean zero state.
    void Reset()
    {
+      snapshotId        = 0;
+      parentId          = 0;
+      sequenceNumber    = 0;
       bid               = 0.0;
       ask               = 0.0;
       spread            = 0;
