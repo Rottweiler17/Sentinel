@@ -153,11 +153,31 @@ This log persistently records all user questions, technical discussions, archite
   - On-screen Developer Panel & Menu system, Validation Mode, and Strategy Tester Visual Replay Mode.
   - Strictly 100% read-only: zero BUY/SELL signals, zero trade execution.
 
+### Phase 18 Compilation Fix Pass (Aug 6, 2026)
+- **Commit**: `2078271`
+- **Objective**: Adapted all Phase 18 application, visualization, strategy, and test components to strictly consume existing repository snapshot fields without inventing missing properties.
+- **Files Adapted**:
+  - `Apps/SentinelDeveloper/SentinelAppEngine.mqh`
+  - `Apps/SentinelDeveloper/SentinelAppMenu.mqh`
+  - `Include/SENTINEL/Engines/Confluence/EvidenceAggregator.mqh`
+  - `Include/SENTINEL/Strategies/ICT/ICTChecklist.mqh`
+  - `Include/SENTINEL/Visualization/DebugPanel.mqh`
+  - `Include/SENTINEL/Visualization/OverlayManager.mqh`
+  - `Include/SENTINEL/Visualization/ValidationModeOverlay.mqh`
+  - `Include/SENTINEL/Tests/Phase15ConfluenceTest.mqh`
+  - `Include/SENTINEL/Tests/Phase15DemoTest.mqh`
+  - `Include/SENTINEL/Tests/Phase16DemoTest.mqh`
+  - `Include/SENTINEL/Tests/Phase17DemoTest.mqh`
+  - `Include/SENTINEL/Tests/Phase17ICTValidationTest.mqh`
+  - `Include/SENTINEL/Tests/Phase18DemoTest.mqh`
+- **Compilation Result**: 0 errors.
+
 ---
 
 ## Future Action Items & Developer Testing Protocol
 - **Official Developer Environment Established**: All future framework testing, snapshot validation, and empirical analysis on XAUUSD historical data will be performed through `Apps/SentinelDeveloper/SentinelDeveloper.mq5`.
 - Continue logging all user questions and feature requests in this file.
+
 
 
 
