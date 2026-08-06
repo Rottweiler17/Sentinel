@@ -61,7 +61,7 @@ public:
 
       if(m_eventBusRef != NULL)
       {
-         m_eventBusRef.Subscribe(EVENT_MKT_TICK, this);
+         m_eventBusRef.Subscribe(EVENT_MKT_TICK, GetPointer(this));
       }
 
       CLogger::Info(m_engineName, "FVGEngine initialized successfully.");

@@ -8,11 +8,13 @@
 #include "VisualizationSnapshot.mqh"
 #include "VisualizationConfiguration.mqh"
 
-/// @interface IVisualizationEngine
+/// @class IVisualizationEngine
 /// @brief Contract interface for Developer Visualization Engine implementations.
-interface IVisualizationEngine
+class IVisualizationEngine
 {
 public:
+   virtual ~IVisualizationEngine() {}
+
    virtual void                         Initialize(long chartId) = 0;
    virtual bool                         Render(const SMarketContext &context) = 0;
    virtual SVisualizationConfiguration  GetConfiguration() const = 0;

@@ -33,7 +33,7 @@ public:
    {
       string panel = "======================================================\n";
       panel += "       SENTINEL FRAMEWORK DEVELOPER APPLICATION       \n";
-      panel += StringFormat(" Version: 1.0.0-DEV | Build: 2026.08.06 | Mode: READ-ONLY\n");
+      panel += " Version: 1.0.0-DEV | Build: 2026.08.06 | Mode: READ-ONLY\n";
       panel += "======================================================\n";
       panel += StringFormat(" Symbol:           %-10s | Timeframe: %d min\n", _Symbol, _Period);
       panel += StringFormat(" Tick Time:        %s\n", TimeToString(context.timestamp, TIME_DATE|TIME_SECONDS));

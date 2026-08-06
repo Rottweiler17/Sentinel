@@ -8,11 +8,12 @@
 #include "../../Framework/Context/MarketContext.mqh"
 #include "OrderBlockSnapshot.mqh"
 
-/// @interface IOrderBlockEngine
+/// @class IOrderBlockEngine
 /// @brief Stable public interface contract for the Order Block detection module.
-interface IOrderBlockEngine
+class IOrderBlockEngine
 {
 public:
+   virtual ~IOrderBlockEngine() {}
    virtual bool GetSnapshot(SOrderBlockSnapshot &snapshot) const = 0;
    virtual void ProcessOrderBlocks(const SMarketContext &context) = 0;
 };

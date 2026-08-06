@@ -53,7 +53,7 @@ public:
       output += "--------------------------------------\n";
       output += StringFormat("Framework FPS:     %.1f FPS\n", fps);
       output += StringFormat("Tick Processing:   %.2f ms\n", tickMs);
-      output += StringFormat("Memory Usage:      < 32 KB (Heap Zero Alloc)\n");
+      output += "Memory Usage:      < 32 KB (Heap Zero Alloc)\n";
       return output;
    }
 };

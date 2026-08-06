@@ -8,11 +8,12 @@
 #include "../../Framework/Context/MarketContext.mqh"
 #include "FVGSnapshot.mqh"
 
-/// @interface IFVGEngine
+/// @class IFVGEngine
 /// @brief Stable public interface contract for the Fair Value Gap detection engine module.
-interface IFVGEngine
+class IFVGEngine
 {
 public:
+   virtual ~IFVGEngine() {}
    virtual bool GetSnapshot(SFVGSnapshot &snapshot) const = 0;
    virtual void ProcessFVGs(const SMarketContext &context) = 0;
 };
