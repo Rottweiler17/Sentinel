@@ -182,11 +182,17 @@ This log persistently records all user questions, technical discussions, archite
   5. **Abstract Interface Class Definition**: Declared `IVisualizationEngine`, `IOrderBlockEngine`, and `IFVGEngine` as abstract base classes with virtual destructors.
 - **Compilation Status**: **0 Errors, 0 Warnings**.
 
+### MetaEditor MQL5 Include Path Fix Pass (Aug 6, 2026)
+- **Commit**: `44c68d4`
+- **Root Cause Fix**: Corrected relative include path `#include "../../Framework/Context/MarketContext.mqh"` -> `#include "../Framework/Context/MarketContext.mqh"` across all 5 files in `Include/SENTINEL/Visualization/` (`IVisualizationEngine.mqh`, `DebugPanel.mqh`, `OverlayManager.mqh`, `RenderingManager.mqh`, `ValidationModeOverlay.mqh`). Previously, `../../` stepped up 2 directories into `Include/` looking for `Include/Framework/Context/MarketContext.mqh` which caused MetaEditor's `file 'Include\Framework\Context\MarketContext.mqh' not found` error and triggered cascade compiler errors across all dependent headers.
+- **Compilation Status**: **0 Errors, 0 Warnings**.
+
 ---
 
 ## Future Action Items & Developer Testing Protocol
 - **Official Developer Environment Established**: All future framework testing, snapshot validation, and empirical analysis on XAUUSD historical data will be performed through `Apps/SentinelDeveloper/SentinelDeveloper.mq5`.
 - Continue logging all user questions and feature requests in this file.
+
 
 
 
