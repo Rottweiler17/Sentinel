@@ -35,7 +35,8 @@ public:
       RecalculateQuality();
    }
 
-   const SLiquidityStats* GetStats() const { return &m_stats; }
+   bool GetStats(SLiquidityStats &stats) const { stats = m_stats; return true; }
+   SLiquidityStats GetStats() const { return m_stats; }
 
    void Reset()
    {

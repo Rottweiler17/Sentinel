@@ -9,17 +9,13 @@
 #include "../Structure/StructureSnapshot.mqh"
 #include "LiquiditySnapshot.mqh"
 
-/// @interface ILiquidityEngine
+/// @class ILiquidityEngine
 /// @brief Stable public interface contract for the Institutional Liquidity Engine.
-/// 
-/// @note PUBLIC CONTRACT GUARANTEES:
-/// 1. Liquidity Pools: Detects and caches active and consumed resting BSL and SSL pools.
-/// 2. Equal Highs/Lows: Identifies double top/bottom (EQH/EQL) patterns within configured tolerances.
-/// 3. Sweeps: Detects Bullish, Bearish, Partial, and Complete liquidity sweeps.
-/// 4. Classification: Classifies pool significance levels (Weak to Institutional).
-interface ILiquidityEngine : public IEngine
+class ILiquidityEngine
 {
 public:
-   virtual const SLiquiditySnapshot* GetSnapshot() const = 0;
+   virtual ~ILiquidityEngine() {}
+   virtual bool GetSnapshot(SLiquiditySnapshot &snapshot) const = 0;
+   virtual SLiquiditySnapshot GetSnapshot() const = 0;
    virtual void ProcessLiquidity(const SMarketDataSnapshot &marketSnap, const SStructureSnapshot &structSnap) = 0;
 };

@@ -15,7 +15,7 @@
 
 /// @class CSessionEngine
 /// @brief Master Session Engine. Tracks current trading sessions, statistics, and historical daily/weekly/monthly reference levels.
-class CSessionEngine : public CBaseEngine, public ISessionEngine, public IEventListener
+class CSessionEngine : public CBaseEngine
 {
 private:
    CSessionConfiguration   m_config;
@@ -57,12 +57,14 @@ public:
       if(!CBaseEngine::Initialize(config, bus))
          return false;
 
-      int brokerOffset = (int)config.GetInt("session.broker_offset_hours", 2);
+      int brokerOffset = 2;
+      if(config != NULL)
+         brokerOffset = (int)config.GetInt("session.broker_offset_hours", 2);
       m_config.SetBrokerOffsetHours(brokerOffset);
 
       if(m_eventBusRef != NULL)
       {
-         m_eventBusRef.Subscribe(EVENT_MKT_TICK, this);
+         m_eventBusRef.Subscribe(EVENT_MKT_TICK, (IEventListener*)GetPointer(this));
       }
 
       CLogger::Info(m_engineName, "SessionEngine initialized.");
@@ -156,20 +158,21 @@ public:
       UpdateSnapshot(context, newSession);
    }
 
-   virtual const SSessionSnapshot* GetSnapshot() const override { return &m_currentSnapshot; }
+   bool GetSnapshot(SSessionSnapshot &snapshot) const { snapshot = m_currentSnapshot; return true; }
+   SSessionSnapshot GetSnapshot() const { return m_currentSnapshot; }
 
 private:
    /// @brief Updates current immutable SSessionSnapshot with version tracking.
    void UpdateSnapshot(const SMarketContext &context, ENUM_MARKET_SESSION session)
    {
       m_snapshotSequence++;
-      ulong newSnapshotId = (ulong)context.marketData.currentTick.time_msc + m_snapshotSequence;
+      ulong newSnapshotId = (ulong)context.timestamp + m_snapshotSequence;
 
       m_currentSnapshot.snapshotId     = newSnapshotId;
       m_currentSnapshot.parentId       = m_lastSnapshotId;
       m_currentSnapshot.sequenceNumber = m_snapshotSequence;
       m_currentSnapshot.currentSession = session;
-      m_currentSnapshot.stats          = *m_stats.GetStats();
+      m_currentSnapshot.stats          = m_stats.GetStats();
       m_currentSnapshot.timestamp      = context.timestamp;
 
       m_cache.AddSnapshot(m_currentSnapshot);

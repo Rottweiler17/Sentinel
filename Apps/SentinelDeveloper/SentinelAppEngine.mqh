@@ -126,23 +126,19 @@ public:
 
       // 2. Process Structure Engine
       m_structureEngine.ProcessStructure(m_context.marketData);
-      if(m_structureEngine.GetSnapshot() != NULL)
-         m_context.structure = *m_structureEngine.GetSnapshot();
+      m_context.structure = m_structureEngine.GetSnapshot();
 
       // 3. Process Liquidity Engine
       m_liquidityEngine.ProcessLiquidity(m_context.marketData, m_context.structure);
-      if(m_liquidityEngine.GetSnapshot() != NULL)
-         m_context.liquidity = *m_liquidityEngine.GetSnapshot();
+      m_context.liquidity = m_liquidityEngine.GetSnapshot();
 
       // 4. Process Session Engine
       m_sessionEngine.ProcessSession(m_context);
-      if(m_sessionEngine.GetSnapshot() != NULL)
-         m_context.session = *m_sessionEngine.GetSnapshot();
+      m_context.session = m_sessionEngine.GetSnapshot();
 
       // 5. Process Market State Engine
       m_marketStateEngine.ProcessState(m_context);
-      if(m_marketStateEngine.GetSnapshot() != NULL)
-         m_context.state = *m_marketStateEngine.GetSnapshot();
+      m_context.state = m_marketStateEngine.GetSnapshot();
 
       // 6. Process Order Block Engine
       m_orderBlockEngine.ProcessOrderBlocks(m_context);

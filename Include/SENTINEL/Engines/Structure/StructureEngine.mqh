@@ -20,7 +20,7 @@
 
 /// @class CStructureEngine
 /// @brief Master Market Structure Engine. Single source of truth for swings, BOS, CHOCH, market trend, and state machine transitions.
-class CStructureEngine : public CBaseEngine, public IStructureEngine
+class CStructureEngine : public CBaseEngine
 {
 private:
    CSwingDetector              m_swingDetector;
@@ -52,13 +52,15 @@ public:
       if(!CBaseEngine::Initialize(config, bus))
          return false;
 
-      int swingLength = (int)config.GetInt("structure.swing_length", 5);
+      int swingLength = 5;
+      if(config != NULL)
+         swingLength = (int)config.GetInt("structure.swing_length", 5);
       m_swingDetector.SetSwingLength(swingLength);
 
       if(m_eventBusRef != NULL)
       {
-         m_eventBusRef.Subscribe(EVENT_MKT_TICK, this);
-         m_eventBusRef.Subscribe(EVENT_MKT_NEW_BAR, this);
+         m_eventBusRef.Subscribe(EVENT_MKT_TICK, (IEventListener*)GetPointer(this));
+         m_eventBusRef.Subscribe(EVENT_MKT_NEW_BAR, (IEventListener*)GetPointer(this));
       }
 
       CLogger::Info(m_engineName, StringFormat("StructureEngine initialized with swing length = %d.", swingLength));
@@ -154,15 +156,16 @@ public:
          m_eventBusRef.Publish(CStructureEvents::CreateSwingEvent(swing));
    }
 
-   /// @brief Gets pointer to current immutable StructureSnapshot.
-   const SStructureSnapshot* GetSnapshot() const { return &m_currentSnapshot; }
+   /// @brief Gets reference or copy of current immutable StructureSnapshot.
+   bool GetSnapshot(SStructureSnapshot &snapshot) const { snapshot = m_currentSnapshot; return true; }
+   SStructureSnapshot GetSnapshot() const { return m_currentSnapshot; }
 
 private:
    /// @brief Updates current immutable SStructureSnapshot with version tracking.
    void UpdateSnapshot(const SMarketDataSnapshot &marketSnap, ENUM_BREAK_TYPE lastBreak)
    {
       m_snapshotSequence++;
-      ulong newSnapshotId = (ulong)marketSnap.time_msc + m_snapshotSequence;
+      ulong newSnapshotId = (ulong)marketSnap.timestamp + m_snapshotSequence;
 
       m_currentSnapshot.Reset();
       m_currentSnapshot.snapshotId       = newSnapshotId;

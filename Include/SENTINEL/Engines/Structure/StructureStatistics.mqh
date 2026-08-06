@@ -39,7 +39,8 @@ public:
       RecalculateQuality();
    }
 
-   const SStructureStats* GetStats() const { return &m_stats; }
+   bool GetStats(SStructureStats &stats) const { stats = m_stats; return true; }
+   SStructureStats GetStats() const { return m_stats; }
 
    void Reset()
    {

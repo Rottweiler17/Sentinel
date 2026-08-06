@@ -8,16 +8,13 @@
 #include "../../Framework/Context/MarketContext.mqh"
 #include "MarketStateSnapshot.mqh"
 
-/// @interface IMarketStateEngine
+/// @class IMarketStateEngine
 /// @brief Stable public interface contract for the Market State Classification Engine.
-/// 
-/// @note PUBLIC CONTRACT GUARANTEES:
-/// 1. State Classification: Resolves exact environment codes (Trending, Range, Accumulation, Post-Sweep).
-/// 2. Metrics: Provides confidence, strength, and volatility ratings.
-/// 3. Transitions: Signals environment state change triggers.
-interface IMarketStateEngine : public IEngine
+class IMarketStateEngine
 {
 public:
-   virtual const SMarketStateSnapshot* GetSnapshot() const = 0;
+   virtual ~IMarketStateEngine() {}
+   virtual bool GetSnapshot(SMarketStateSnapshot &snapshot) const = 0;
+   virtual SMarketStateSnapshot GetSnapshot() const = 0;
    virtual void ProcessState(const SMarketContext &context) = 0;
 };

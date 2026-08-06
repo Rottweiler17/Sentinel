@@ -16,7 +16,7 @@
 
 /// @class CMarketStateEngine
 /// @brief Master Market State Classification Engine. Evaluates structural trend, spreads, and sweeps to classify environment states.
-class CMarketStateEngine : public CBaseEngine, public IMarketStateEngine, public IEventListener
+class CMarketStateEngine : public CBaseEngine
 {
 private:
    CMarketStateConfiguration  m_config;
@@ -44,7 +44,7 @@ public:
 
       if(m_eventBusRef != NULL)
       {
-         m_eventBusRef.Subscribe(EVENT_MKT_TICK, this);
+         m_eventBusRef.Subscribe(EVENT_MKT_TICK, (IEventListener*)GetPointer(this));
       }
 
       CLogger::Info(m_engineName, "MarketStateEngine initialized.");
@@ -80,7 +80,7 @@ public:
 
       // 2. Update snapshot
       m_snapshotSequence++;
-      ulong newSnapshotId = (ulong)context.marketData.currentTick.time_msc + m_snapshotSequence;
+      ulong newSnapshotId = (ulong)context.timestamp + m_snapshotSequence;
 
       m_currentSnapshot.snapshotId       = newSnapshotId;
       m_currentSnapshot.parentId         = m_lastSnapshotId;
@@ -97,5 +97,6 @@ public:
       m_lastSnapshotId = newSnapshotId;
    }
 
-   virtual const SMarketStateSnapshot* GetSnapshot() const override { return &m_currentSnapshot; }
+   bool GetSnapshot(SMarketStateSnapshot &snapshot) const { snapshot = m_currentSnapshot; return true; }
+   SMarketStateSnapshot GetSnapshot() const { return m_currentSnapshot; }
 };

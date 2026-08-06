@@ -16,7 +16,7 @@
 
 /// @class CLiquidityEngine
 /// @brief Master Institutional Liquidity Engine. Single source of truth for all liquidity pools, BSL/SSL, confidence scores, and sweeps.
-class CLiquidityEngine : public CBaseEngine, public ILiquidityEngine
+class CLiquidityEngine : public CBaseEngine
 {
 private:
    CLiquidityDetector   m_detector;
@@ -41,12 +41,14 @@ public:
       if(!CBaseEngine::Initialize(config, bus))
          return false;
 
-      double tolerance = config.GetDouble("liquidity.tolerance_pips", 3.0);
+      double tolerance = 3.0;
+      if(config != NULL)
+         tolerance = config.GetDouble("liquidity.tolerance_pips", 3.0);
 
       if(m_eventBusRef != NULL)
       {
-         m_eventBusRef.Subscribe(EVENT_MKT_TICK, this);
-         m_eventBusRef.Subscribe(EVENT_MKT_SWING_FOUND, this);
+         m_eventBusRef.Subscribe(EVENT_MKT_TICK, (IEventListener*)GetPointer(this));
+         m_eventBusRef.Subscribe(EVENT_MKT_SWING_FOUND, (IEventListener*)GetPointer(this));
       }
 
       CLogger::Info(m_engineName, StringFormat("LiquidityEngine initialized with tolerance = %.1f pips.", tolerance));
@@ -138,15 +140,16 @@ public:
       UpdateSnapshot(marketSnap);
    }
 
-   /// @brief Gets pointer to current immutable LiquiditySnapshot.
-   const SLiquiditySnapshot* GetSnapshot() const { return &m_currentSnapshot; }
+   /// @brief Gets reference or copy of current immutable LiquiditySnapshot.
+   bool GetSnapshot(SLiquiditySnapshot &snapshot) const { snapshot = m_currentSnapshot; return true; }
+   SLiquiditySnapshot GetSnapshot() const { return m_currentSnapshot; }
 
 private:
    /// @brief Updates current immutable SLiquiditySnapshot with version tracking & confidence scores.
    void UpdateSnapshot(const SMarketDataSnapshot &marketSnap)
    {
       m_snapshotSequence++;
-      ulong newSnapshotId = (ulong)marketSnap.time_msc + m_snapshotSequence;
+      ulong newSnapshotId = (ulong)marketSnap.timestamp + m_snapshotSequence;
 
       m_currentSnapshot.Reset();
       m_currentSnapshot.snapshotId            = newSnapshotId;

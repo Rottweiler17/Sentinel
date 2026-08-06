@@ -57,7 +57,8 @@ public:
       return m_runningTotalRange / m_recordedSessionsCount;
    }
 
-   const SSessionStats* GetStats() const { return &m_stats; }
+   bool GetStats(SSessionStats &stats) const { stats = m_stats; return true; }
+   SSessionStats GetStats() const { return m_stats; }
 
    void Reset()
    {
