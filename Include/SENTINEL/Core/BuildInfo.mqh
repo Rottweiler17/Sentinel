@@ -21,7 +21,7 @@ class CBuildInfo
 {
 public:
    static string FrameworkName()        { return SENTINEL_FRAMEWORK_NAME; }
-   static string BuildDate()            { return SENTINEL_BUILD_DATE; }
+   static string BuildDate()            { return TimeToString(SENTINEL_BUILD_DATE, TIME_DATE); }
    static string BuildTime()            { return TimeToString(SENTINEL_BUILD_TIME, TIME_MINUTES); }
    static string CompatibilityVersion() { return SENTINEL_COMPATIBILITY_VERSION; }
    static int    BuildNumber()          { return SENTINEL_BUILD_NUMBER; }
@@ -31,7 +31,7 @@ public:
                           SENTINEL_FRAMEWORK_NAME, 
                           SENTINEL_VERSION_STRING, 
                           SENTINEL_BUILD_NUMBER, 
-                          SENTINEL_BUILD_DATE, 
+                          TimeToString(SENTINEL_BUILD_DATE, TIME_DATE), 
                           TimeToString(SENTINEL_BUILD_TIME, TIME_MINUTES));
    }
 };
