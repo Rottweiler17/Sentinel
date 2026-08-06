@@ -10,7 +10,7 @@
 
 /// @class CBaseEngine
 /// @brief Abstract base class for core framework engines supporting dependency injection.
-class CBaseEngine : public IEngine
+class CBaseEngine : public IEngine, public IEventListener
 {
 protected:
    string          m_engineName;
@@ -47,6 +47,9 @@ public:
 
    /// @brief Called when a new bar closes on a monitored timeframe.
    virtual void OnBar(const string symbol, ENUM_TIMEFRAMES tf) override {}
+
+   /// @brief Called when an event is received from EventBus.
+   virtual void OnEvent(const SSentinelEvent &event) override {}
 
    /// @brief Gracefully shuts down engine and releases dependency pointers.
    virtual void Shutdown() override

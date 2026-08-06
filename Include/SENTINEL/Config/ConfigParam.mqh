@@ -35,7 +35,8 @@ public:
    CConfigParam(const string key, bool val)   : m_key(key), m_type(PARAM_TYPE_BOOL),   m_valInt(0),   m_valDouble(0.0), m_valBool(val) {}
 
    string Key() const { return m_key; }
-   ENUM_PARAM_TYPE Type() const { return m_type; }
+   virtual int Type() const override { return (int)m_type; }
+   ENUM_PARAM_TYPE ParamType() const { return m_type; }
 
    long   GetInt() const { return m_valInt; }
    double GetDouble() const { return m_valDouble; }

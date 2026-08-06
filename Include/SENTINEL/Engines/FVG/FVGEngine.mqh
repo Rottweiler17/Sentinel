@@ -18,7 +18,7 @@
 
 /// @class CFVGEngine
 /// @brief Master FVG Engine. Tracks 3-candle histories, detects imbalances, and calculates fill lifecycles.
-class CFVGEngine : public CBaseEngine, public IEventListener
+class CFVGEngine : public CBaseEngine
 {
 private:
    CFVGConfiguration m_config;

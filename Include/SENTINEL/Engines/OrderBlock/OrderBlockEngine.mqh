@@ -18,7 +18,7 @@
 
 /// @class COrderBlockEngine
 /// @brief Master Order Block Engine. Discovers, validates, and updates order block zones.
-class COrderBlockEngine : public CBaseEngine, public IEventListener
+class COrderBlockEngine : public CBaseEngine
 {
 private:
    COrderBlockConfiguration m_config;
