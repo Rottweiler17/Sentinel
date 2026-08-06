@@ -33,26 +33,22 @@ public:
       string output = "=== SENTINEL FRAMEWORK DEBUG PANEL ===\n";
       output += StringFormat("Symbol:            %s\n", _Symbol);
       output += StringFormat("Timeframe:         %d min\n", _Period);
-      output += StringFormat("Session:           %s (Bias: %.2f)\n", 
-                             (context.session.sessionType == 1 ? "ASIA" : (context.session.sessionType == 2 ? "LONDON" : "NY")),
-                             context.session.directionalBias);
-      output += StringFormat("Market State:      %s\n", (context.state.stateType == 1 ? "TRENDING_BULLISH" : (context.state.stateType == 2 ? "TRENDING_BEARISH" : "RANGING")));
-      output += StringFormat("Trend:             %s\n", (context.structure.trend == 1 ? "BULLISH" : (context.structure.trend == 2 ? "BEARISH" : "NEUTRAL")));
-      output += StringFormat("Liquidity:         SSL Sweep: %s | BSL Sweep: %s\n", 
-                             (context.liquidity.sellSideSweepActive ? "YES" : "NO"),
-                             (context.liquidity.buySideSweepActive ? "YES" : "NO"));
-      output += StringFormat("Order Blocks:      Bullish: %d | Bearish: %d\n", context.orderBlocks.activeBullishObCount, context.orderBlocks.activeBearishObCount);
-      output += StringFormat("Fair Value Gaps:   Bullish: %d | Bearish: %d\n", context.fairValueGaps.unfilledBullishFvgCount, context.fairValueGaps.unfilledBearishFvgCount);
-      output += StringFormat("Volume Strength:   %.2f (Buy: %.2f / Sell: %.2f)\n", 
-                             context.features.volumeStrength.normalizedValue,
-                             context.features.buyingPressure.normalizedValue,
-                             context.features.sellingPressure.normalizedValue);
+      output += StringFormat("Session:           Enum Session #%d\n", (int)context.session.currentSession);
+      output += StringFormat("Market State:      Enum State #%d (Conf: %.1f%%)\n", (int)context.state.currentState, context.state.confidence);
+      output += StringFormat("External Trend:    Enum Trend #%d (Strength: %.2f)\n", (int)context.structure.externalTrend, context.structure.trendStrength);
+      output += StringFormat("Liquidity Sweep:   Enum Sweep #%d (Active Pools: %d)\n", (int)context.liquidity.sweepDirection, context.liquidity.activePoolsCount);
+      output += StringFormat("Order Blocks:      Active Blocks: %d\n", context.orderBlocks.activeBlocksCount);
+      output += StringFormat("Fair Value Gaps:   Active Gaps: %d\n", context.fairValueGaps.activeGapsCount);
+      output += StringFormat("Volume Metric:     RelVol: %.2f (BuyP: %.1f / SellP: %.1f)\n", 
+                             context.volume.relativeVolume,
+                             context.orderFlow.buyingPressure,
+                             context.orderFlow.sellingPressure);
       output += StringFormat("Confluence Score:  %.3f (Align: %.2f, Conflict: %.2f)\n", 
                              context.confluence.overallConfluenceScore,
                              context.confluence.alignmentScore,
                              context.confluence.conflictScore);
       output += StringFormat("Decision Score:    %.3f (Confidence: %.2f)\n", 
-                             context.decisions.compositeScore,
+                             context.decisions.overallScore,
                              context.decisions.confidence);
       output += "--------------------------------------\n";
       output += StringFormat("Framework FPS:     %.1f FPS\n", fps);

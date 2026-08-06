@@ -25,15 +25,15 @@ public:
       context.timestamp = TimeCurrent();
 
       // Populate Snapshots for a High-Probability ICT Setup
-      context.structure.trend = 1;                              // 1. MSS: Bullish
-      context.liquidity.sellSideSweepActive = true;            // 2. Liquidity Sweep: SSL Swept
-      context.orderBlocks.activeBullishObCount = 2;            // 3. Order Block: 2 Bullish OBs
-      context.fairValueGaps.unfilledBullishFvgCount = 1;       // 4. FVG: 1 Unfilled Bullish Gap
-      context.session.sessionType = 2;                         // 5. Session: London Killzone
-      context.state.stateType = 1;                              // 6. Market State: Trending Regime
-      context.confluence.overallConfluenceScore = 0.82;        // 7. Confluence: High (+0.82)
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
+      context.orderBlocks.activeBlocksCount = 2;
+      context.fairValueGaps.activeGapsCount = 1;
+      context.session.currentSession = SESSION_LONDON;
+      context.state.currentState = STATE_ENV_TRENDING_BULLISH;
+      context.confluence.overallConfluenceScore = 0.82;
       context.confluence.alignmentScore = 0.88;
-      context.decisions.compositeScore = 0.78;                  // 8. Decision: High Confidence (0.85)
+      context.decisions.overallScore = 0.78;
       context.decisions.confidence = 0.85;
 
       Print("[INPUT] Evaluating MarketContext against 8 Core ICT Criteria...");

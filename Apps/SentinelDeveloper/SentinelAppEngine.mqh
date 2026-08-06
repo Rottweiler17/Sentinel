@@ -127,17 +127,15 @@ public:
       // 1. Update Data Engine & Generate MarketDataSnapshot
       m_context.sequenceNumber = ++m_sequenceNumber;
       m_context.timestamp      = TimeCurrent();
-      m_context.marketData.high  = iHigh(_Symbol, _Period, 0);
-      m_context.marketData.low   = iLow(_Symbol, _Period, 0);
-      m_context.marketData.close = iClose(_Symbol, _Period, 0);
+      m_context.marketData.currentCandle.high  = iHigh(_Symbol, _Period, 0);
+      m_context.marketData.currentCandle.low   = iLow(_Symbol, _Period, 0);
+      m_context.marketData.currentCandle.close = iClose(_Symbol, _Period, 0);
 
       // 2. Evaluate Analytical Engines
-      m_context.structure.trend = 1; // Bullish structure
-      m_context.liquidity.sellSideSweepActive = true;
-      m_context.orderBlocks.activeBullishObCount = 2;
-      m_context.fairValueGaps.unfilledBullishFvgCount = 1;
-      m_context.session.sessionType = 2; // London session
-      m_context.state.stateType = 1;
+      m_context.structure.externalTrend = TREND_BULLISH;
+      m_context.liquidity.sweepDirection = SWEEP_BULLISH;
+      m_context.session.currentSession = SESSION_LONDON;
+      m_context.state.currentState = STATE_ENV_TRENDING_BULLISH;
 
       // 3. Evaluate Confluence Engine
       SConfluenceSnapshot confluenceSnap;
@@ -145,8 +143,8 @@ public:
       m_context.confluence = confluenceSnap;
 
       // 4. Evaluate Decision Framework (Read-Only)
-      m_context.decisions.compositeScore = confluenceSnap.overallConfluenceScore;
-      m_context.decisions.confidence     = confluenceSnap.confidence;
+      m_context.decisions.overallScore = confluenceSnap.overallConfluenceScore;
+      m_context.decisions.confidence   = confluenceSnap.confidence;
 
       // 5. Update Developer Visualization
       m_visualizationEngine.Render(m_context);

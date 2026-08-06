@@ -32,7 +32,7 @@ public:
          appEngine.ProcessTickCycle();
          SMarketContext ctx = appEngine.GetContext();
          Print(StringFormat("  - Tick #%d Processed -> Sequence #%d | High: %.2f | Close: %.2f",
-                            tick, ctx.sequenceNumber, ctx.marketData.high, ctx.marketData.close));
+                            tick, ctx.sequenceNumber, ctx.marketData.currentCandle.high, ctx.marketData.currentCandle.close));
       }
 
       // 4. Format & Display Developer Panel Content

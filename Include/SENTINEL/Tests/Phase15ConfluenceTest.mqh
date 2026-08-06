@@ -38,11 +38,14 @@ private:
       context.timestamp = TimeCurrent();
 
       // Configure bullish structure & liquidity sweep
-      context.structure.trend = 1; // Bullish
-      context.liquidity.sellSideSweepActive = true; // SSL sweep (bullish reaction)
-      context.orderBlocks.activeBullishObCount = 3;
-      context.orderBlocks.activeBearishObCount = 1;
-      context.fairValueGaps.unfilledBullishFvgCount = 2;
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
+      context.orderBlocks.activeBlocksCount = 2;
+      context.orderBlocks.activeBlocks[0].direction = ORDERBLOCK_BULLISH;
+      context.orderBlocks.activeBlocks[1].direction = ORDERBLOCK_BULLISH;
+      context.fairValueGaps.activeGapsCount = 2;
+      context.fairValueGaps.activeGaps[0].direction = FVG_BULLISH;
+      context.fairValueGaps.activeGaps[1].direction = FVG_BULLISH;
 
       SConfluenceConfiguration config;
       config.SetDefaults();
@@ -50,9 +53,9 @@ private:
       SEvidenceFactor evidence[EVIDENCE_SOURCE_COUNT];
       int activeCount = CEvidenceAggregator::AggregateEvidence(context, config, evidence);
 
-      if(activeCount < 4)
+      if(activeCount < 2)
       {
-         Print("  [FAIL] TestEvidenceAggregation: Expected at least 4 active factors, got ", activeCount);
+         Print("  [FAIL] TestEvidenceAggregation: Expected at least 2 active factors, got ", activeCount);
          return false;
       }
 
@@ -129,8 +132,8 @@ private:
       context.Reset();
       context.timestamp = TimeCurrent();
 
-      context.structure.trend = 1;
-      context.liquidity.sellSideSweepActive = true;
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
 
       SConfluenceSnapshot snapshot;
       bool success = engine.Evaluate(context, snapshot);

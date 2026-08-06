@@ -18,11 +18,11 @@ public:
       // 1. Market Structure Shift (MSS / BOS)
       conditions[(int)ICT_COND_MARKET_STRUCTURE_SHIFT].condition = ICT_COND_MARKET_STRUCTURE_SHIFT;
       conditions[(int)ICT_COND_MARKET_STRUCTURE_SHIFT].weight    = 1.0;
-      if(context.structure.trend != 0)
+      if(context.structure.externalTrend != TREND_NEUTRAL && context.structure.externalTrend != TREND_UNKNOWN)
       {
          conditions[(int)ICT_COND_MARKET_STRUCTURE_SHIFT].satisfied   = true;
          conditions[(int)ICT_COND_MARKET_STRUCTURE_SHIFT].score       = 1.0;
-         conditions[(int)ICT_COND_MARKET_STRUCTURE_SHIFT].description = "Market Structure Shift / Clear Trend Established";
+         conditions[(int)ICT_COND_MARKET_STRUCTURE_SHIFT].description = "Market Structure Shift / Clear External Trend Established";
       }
       else
       {
@@ -34,12 +34,11 @@ public:
       // 2. Liquidity Sweep Present (BSL / SSL)
       conditions[(int)ICT_COND_LIQUIDITY_SWEEP].condition = ICT_COND_LIQUIDITY_SWEEP;
       conditions[(int)ICT_COND_LIQUIDITY_SWEEP].weight    = 0.95;
-      if(context.liquidity.sellSideSweepActive || context.liquidity.buySideSweepActive)
+      if(context.liquidity.sweepDirection != SWEEP_NONE)
       {
          conditions[(int)ICT_COND_LIQUIDITY_SWEEP].satisfied   = true;
          conditions[(int)ICT_COND_LIQUIDITY_SWEEP].score       = 0.95;
-         conditions[(int)ICT_COND_LIQUIDITY_SWEEP].description = StringFormat("Liquidity Sweep Present (%s)", 
-                                                                    (context.liquidity.sellSideSweepActive ? "SSL Sweep" : "BSL Sweep"));
+         conditions[(int)ICT_COND_LIQUIDITY_SWEEP].description = StringFormat("Liquidity Sweep Present (Sweep Direction #%d)", (int)context.liquidity.sweepDirection);
       }
       else
       {
@@ -51,12 +50,11 @@ public:
       // 3. Order Block Present (PDARRAY)
       conditions[(int)ICT_COND_ORDER_BLOCK_PRESENT].condition = ICT_COND_ORDER_BLOCK_PRESENT;
       conditions[(int)ICT_COND_ORDER_BLOCK_PRESENT].weight    = 0.90;
-      int totalOB = context.orderBlocks.activeBullishObCount + context.orderBlocks.activeBearishObCount;
-      if(totalOB > 0)
+      if(context.orderBlocks.activeBlocksCount > 0)
       {
          conditions[(int)ICT_COND_ORDER_BLOCK_PRESENT].satisfied   = true;
          conditions[(int)ICT_COND_ORDER_BLOCK_PRESENT].score       = 0.90;
-         conditions[(int)ICT_COND_ORDER_BLOCK_PRESENT].description = StringFormat("Active Order Block Present (%d OBs)", totalOB);
+         conditions[(int)ICT_COND_ORDER_BLOCK_PRESENT].description = StringFormat("Active Order Block Present (%d OBs)", context.orderBlocks.activeBlocksCount);
       }
       else
       {
@@ -68,28 +66,27 @@ public:
       // 4. Fair Value Gap Present (PDARRAY)
       conditions[(int)ICT_COND_FVG_PRESENT].condition = ICT_COND_FVG_PRESENT;
       conditions[(int)ICT_COND_FVG_PRESENT].weight    = 0.85;
-      int totalFVG = context.fairValueGaps.unfilledBullishFvgCount + context.fairValueGaps.unfilledBearishFvgCount;
-      if(totalFVG > 0)
+      if(context.fairValueGaps.activeGapsCount > 0)
       {
          conditions[(int)ICT_COND_FVG_PRESENT].satisfied   = true;
          conditions[(int)ICT_COND_FVG_PRESENT].score       = 0.85;
-         conditions[(int)ICT_COND_FVG_PRESENT].description = StringFormat("Unfilled Fair Value Gap Present (%d FVGs)", totalFVG);
+         conditions[(int)ICT_COND_FVG_PRESENT].description = StringFormat("Active Fair Value Gap Present (%d FVGs)", context.fairValueGaps.activeGapsCount);
       }
       else
       {
          conditions[(int)ICT_COND_FVG_PRESENT].satisfied   = false;
          conditions[(int)ICT_COND_FVG_PRESENT].score       = 0.0;
-         conditions[(int)ICT_COND_FVG_PRESENT].description = "Missing: No Unfilled Fair Value Gap";
+         conditions[(int)ICT_COND_FVG_PRESENT].description = "Missing: No Active Fair Value Gap";
       }
 
       // 5. Session / Killzone Alignment
       conditions[(int)ICT_COND_KILLZONE_SESSION].condition = ICT_COND_KILLZONE_SESSION;
       conditions[(int)ICT_COND_KILLZONE_SESSION].weight    = 0.80;
-      if(context.session.sessionType == 2 || context.session.sessionType == 3 || MathAbs(context.session.directionalBias) > 0.1)
+      if(context.session.currentSession == SESSION_LONDON || context.session.currentSession == SESSION_NEW_YORK)
       {
          conditions[(int)ICT_COND_KILLZONE_SESSION].satisfied   = true;
          conditions[(int)ICT_COND_KILLZONE_SESSION].score       = 0.80;
-         conditions[(int)ICT_COND_KILLZONE_SESSION].description = "Active Killzone / High Volatility Session";
+         conditions[(int)ICT_COND_KILLZONE_SESSION].description = "Active Major Session Killzone";
       }
       else
       {
@@ -101,7 +98,7 @@ public:
       // 6. Market State Alignment
       conditions[(int)ICT_COND_MARKET_STATE].condition = ICT_COND_MARKET_STATE;
       conditions[(int)ICT_COND_MARKET_STATE].weight    = 0.75;
-      if(context.state.stateType == 1 || context.state.stateType == 2)
+      if(context.state.currentState == STATE_ENV_TRENDING_BULLISH || context.state.currentState == STATE_ENV_TRENDING_BEARISH || context.state.currentState == STATE_ENV_EXPANSION)
       {
          conditions[(int)ICT_COND_MARKET_STATE].satisfied   = true;
          conditions[(int)ICT_COND_MARKET_STATE].score       = 0.75;
@@ -111,7 +108,7 @@ public:
       {
          conditions[(int)ICT_COND_MARKET_STATE].satisfied   = false;
          conditions[(int)ICT_COND_MARKET_STATE].score       = 0.0;
-         conditions[(int)ICT_COND_MARKET_STATE].description = "Missing: Consolidation / Choppy Market State";
+         conditions[(int)ICT_COND_MARKET_STATE].description = "Missing: Ranging / Consolidation Market State";
       }
 
       // 7. Confluence Alignment
@@ -133,17 +130,17 @@ public:
       // 8. Decision Framework Score
       conditions[(int)ICT_COND_DECISION_SCORE].condition = ICT_COND_DECISION_SCORE;
       conditions[(int)ICT_COND_DECISION_SCORE].weight    = 0.85;
-      if(MathAbs(context.decisions.compositeScore) >= 0.50 || context.decisions.confidence >= 0.50)
+      if(MathAbs(context.decisions.overallScore) >= 0.50 || context.decisions.confidence >= 0.50)
       {
          conditions[(int)ICT_COND_DECISION_SCORE].satisfied   = true;
          conditions[(int)ICT_COND_DECISION_SCORE].score       = context.decisions.confidence;
-         conditions[(int)ICT_COND_DECISION_SCORE].description = StringFormat("Decision Framework Alignment (Score: %.2f)", context.decisions.compositeScore);
+         conditions[(int)ICT_COND_DECISION_SCORE].description = StringFormat("Decision Framework Alignment (Score: %.2f)", context.decisions.overallScore);
       }
       else
       {
          conditions[(int)ICT_COND_DECISION_SCORE].satisfied   = false;
          conditions[(int)ICT_COND_DECISION_SCORE].score       = 0.0;
-         conditions[(int)ICT_COND_DECISION_SCORE].description = "Missing: Low Decision Confidence";
+         conditions[(int)ICT_COND_DECISION_SCORE].description = "Missing: Low Decision Score";
       }
    }
 };

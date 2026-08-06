@@ -37,15 +37,15 @@ private:
       context.timestamp = TimeCurrent();
 
       // Configure valid ICT setup context
-      context.structure.trend = 1;                              // MSS
-      context.liquidity.sellSideSweepActive = true;            // Liquidity sweep
-      context.orderBlocks.activeBullishObCount = 2;            // Order block
-      context.fairValueGaps.unfilledBullishFvgCount = 1;       // FVG
-      context.session.sessionType = 2;                         // London session
-      context.state.stateType = 1;                              // Trending expansion
-      context.confluence.overallConfluenceScore = 0.75;        // High confluence
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
+      context.orderBlocks.activeBlocksCount = 2;
+      context.fairValueGaps.activeGapsCount = 1;
+      context.session.currentSession = SESSION_LONDON;
+      context.state.currentState = STATE_ENV_TRENDING_BULLISH;
+      context.confluence.overallConfluenceScore = 0.75;
       context.confluence.alignmentScore = 0.80;
-      context.decisions.compositeScore = 0.70;                  // Decision alignment
+      context.decisions.overallScore = 0.70;
       context.decisions.confidence = 0.80;
 
       SICTConditionResult rawConds[ICT_CONDITION_COUNT];
@@ -75,15 +75,15 @@ private:
       context.Reset();
       context.timestamp = TimeCurrent();
 
-      context.structure.trend = 1;
-      context.liquidity.sellSideSweepActive = true;
-      context.orderBlocks.activeBullishObCount = 1;
-      context.fairValueGaps.unfilledBullishFvgCount = 1;
-      context.session.sessionType = 2;
-      context.state.stateType = 1;
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
+      context.orderBlocks.activeBlocksCount = 1;
+      context.fairValueGaps.activeGapsCount = 1;
+      context.session.currentSession = SESSION_LONDON;
+      context.state.currentState = STATE_ENV_TRENDING_BULLISH;
       context.confluence.overallConfluenceScore = 0.80;
       context.confluence.alignmentScore = 0.85;
-      context.decisions.compositeScore = 0.75;
+      context.decisions.overallScore = 0.75;
       context.decisions.confidence = 0.80;
 
       SICTValidationSnapshot snap;

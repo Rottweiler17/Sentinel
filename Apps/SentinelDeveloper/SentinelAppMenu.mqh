@@ -37,27 +37,21 @@ public:
       panel += "======================================================\n";
       panel += StringFormat(" Symbol:           %-10s | Timeframe: %d min\n", _Symbol, _Period);
       panel += StringFormat(" Tick Time:        %s\n", TimeToString(context.timestamp, TIME_DATE|TIME_SECONDS));
-      panel += StringFormat(" Active Session:   %-10s | Bias: %.2f\n", 
-                            (context.session.sessionType == 1 ? "ASIA" : (context.session.sessionType == 2 ? "LONDON" : "NY")),
-                            context.session.directionalBias);
-      panel += StringFormat(" Market State:     %-10s | Trend: %s\n",
-                            (context.state.stateType == 1 ? "TRENDING" : (context.state.stateType == 2 ? "EXPANSION" : "RANGING")),
-                            (context.structure.trend == 1 ? "BULLISH" : (context.structure.trend == 2 ? "BEARISH" : "NEUTRAL")));
-      panel += StringFormat(" Liquidity Sweeps: SSL: %-3s | BSL: %-3s\n",
-                            (context.liquidity.sellSideSweepActive ? "YES" : "NO"),
-                            (context.liquidity.buySideSweepActive ? "YES" : "NO"));
-      panel += StringFormat(" Order Blocks:     Bullish: %d | Bearish: %d\n", context.orderBlocks.activeBullishObCount, context.orderBlocks.activeBearishObCount);
-      panel += StringFormat(" Fair Value Gaps:  Bullish: %d | Bearish: %d\n", context.fairValueGaps.unfilledBullishFvgCount, context.fairValueGaps.unfilledBearishFvgCount);
-      panel += StringFormat(" Volume Status:    Strength: %.2f (Buy: %.2f / Sell: %.2f)\n",
-                            context.features.volumeStrength.normalizedValue,
-                            context.features.buyingPressure.normalizedValue,
-                            context.features.sellingPressure.normalizedValue);
+      panel += StringFormat(" Active Session:   Session Enum #%d\n", (int)context.session.currentSession);
+      panel += StringFormat(" Market State:     State Enum #%d | Trend Enum #%d\n", (int)context.state.currentState, (int)context.structure.externalTrend);
+      panel += StringFormat(" Liquidity Sweep:  Sweep Enum #%d | Active Pools: %d\n", (int)context.liquidity.sweepDirection, context.liquidity.activePoolsCount);
+      panel += StringFormat(" Order Blocks:     Active Blocks: %d\n", context.orderBlocks.activeBlocksCount);
+      panel += StringFormat(" Fair Value Gaps:  Active Gaps: %d\n", context.fairValueGaps.activeGapsCount);
+      panel += StringFormat(" Volume Metric:    RelVol: %.2f (BuyP: %.1f / SellP: %.1f)\n",
+                            context.volume.relativeVolume,
+                            context.orderFlow.buyingPressure,
+                            context.orderFlow.sellingPressure);
       panel += StringFormat(" Confluence Score: %.3f (Align: %.2f, Conflict: %.2f)\n",
                             context.confluence.overallConfluenceScore,
                             context.confluence.alignmentScore,
                             context.confluence.conflictScore);
       panel += StringFormat(" Decision Score:   %.3f (Confidence: %.2f)\n",
-                            context.decisions.compositeScore,
+                            context.decisions.overallScore,
                             context.decisions.confidence);
       panel += "------------------------------------------------------\n";
       panel += " PERFORMANCE & RENDERING TELEMETRY:\n";

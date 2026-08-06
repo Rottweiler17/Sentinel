@@ -28,18 +28,17 @@ public:
          factor.source = EVIDENCE_MARKET_STRUCTURE;
          factor.weight = config.structureWeight;
 
-         // Determine bias from structure snapshot trend enum or feature score
-         if(context.structure.trend == 1) // Bullish
+         if(context.structure.externalTrend == TREND_BULLISH)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 1.0;
-            factor.description = "Market Structure: Bullish Trend / Higher Highs";
+            factor.description = "Market Structure: External Bullish Trend";
          }
-         else if(context.structure.trend == 2) // Bearish
+         else if(context.structure.externalTrend == TREND_BEARISH)
          {
             factor.bias        = BIAS_BEARISH;
             factor.score       = -1.0;
-            factor.description = "Market Structure: Bearish Trend / Lower Lows";
+            factor.description = "Market Structure: External Bearish Trend";
          }
          else
          {
@@ -62,17 +61,17 @@ public:
          factor.source = EVIDENCE_LIQUIDITY;
          factor.weight = config.liquidityWeight;
 
-         if(context.liquidity.sellSideSweepActive)
+         if(context.liquidity.sweepDirection == SWEEP_BULLISH)
          {
-            factor.bias        = BIAS_BULLISH; // SSL sweep -> bullish reversal setup
+            factor.bias        = BIAS_BULLISH;
             factor.score       = 0.9;
-            factor.description = "Liquidity: Sell-Side Liquidity Swept (Bullish Reaction)";
+            factor.description = "Liquidity: Bullish Liquidity Sweep Reaction";
          }
-         else if(context.liquidity.buySideSweepActive)
+         else if(context.liquidity.sweepDirection == SWEEP_BEARISH)
          {
-            factor.bias        = BIAS_BEARISH; // BSL sweep -> bearish reversal setup
+            factor.bias        = BIAS_BEARISH;
             factor.score       = -0.9;
-            factor.description = "Liquidity: Buy-Side Liquidity Swept (Bearish Reaction)";
+            factor.description = "Liquidity: Bearish Liquidity Sweep Reaction";
          }
          else
          {
@@ -95,19 +94,26 @@ public:
          factor.source = EVIDENCE_ORDER_BLOCK;
          factor.weight = config.orderBlockWeight;
 
-         if(context.orderBlocks.activeBullishObCount > context.orderBlocks.activeBearishObCount)
+         int bullishOB = 0, bearishOB = 0;
+         for(int i = 0; i < context.orderBlocks.activeBlocksCount; i++)
+         {
+            if(context.orderBlocks.activeBlocks[i].direction == ORDERBLOCK_BULLISH)
+               bullishOB++;
+            else if(context.orderBlocks.activeBlocks[i].direction == ORDERBLOCK_BEARISH)
+               bearishOB++;
+         }
+
+         if(bullishOB > bearishOB)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 0.85;
-            factor.description = StringFormat("Order Blocks: Active Bullish OB Dominance (%d vs %d)", 
-                                             context.orderBlocks.activeBullishObCount, context.orderBlocks.activeBearishObCount);
+            factor.description = StringFormat("Order Blocks: Active Bullish OB Dominance (%d vs %d)", bullishOB, bearishOB);
          }
-         else if(context.orderBlocks.activeBearishObCount > context.orderBlocks.activeBullishObCount)
+         else if(bearishOB > bullishOB)
          {
             factor.bias        = BIAS_BEARISH;
             factor.score       = -0.85;
-            factor.description = StringFormat("Order Blocks: Active Bearish OB Dominance (%d vs %d)", 
-                                             context.orderBlocks.activeBearishObCount, context.orderBlocks.activeBullishObCount);
+            factor.description = StringFormat("Order Blocks: Active Bearish OB Dominance (%d vs %d)", bearishOB, bullishOB);
          }
          else
          {
@@ -129,19 +135,26 @@ public:
          factor.source = EVIDENCE_FVG;
          factor.weight = config.fvgWeight;
 
-         if(context.fairValueGaps.unfilledBullishFvgCount > context.fairValueGaps.unfilledBearishFvgCount)
+         int bullishFVG = 0, bearishFVG = 0;
+         for(int i = 0; i < context.fairValueGaps.activeGapsCount; i++)
+         {
+            if(context.fairValueGaps.activeGaps[i].direction == FVG_BULLISH && context.fairValueGaps.activeGaps[i].fillPercentage < 100.0)
+               bullishFVG++;
+            else if(context.fairValueGaps.activeGaps[i].direction == FVG_BEARISH && context.fairValueGaps.activeGaps[i].fillPercentage < 100.0)
+               bearishFVG++;
+         }
+
+         if(bullishFVG > bearishFVG)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 0.80;
-            factor.description = StringFormat("FVG: Bullish Imbalance Dominance (%d unfilled)", 
-                                             context.fairValueGaps.unfilledBullishFvgCount);
+            factor.description = StringFormat("FVG: Bullish Imbalance Dominance (%d unfilled)", bullishFVG);
          }
-         else if(context.fairValueGaps.unfilledBearishFvgCount > context.fairValueGaps.unfilledBullishFvgCount)
+         else if(bearishFVG > bullishFVG)
          {
             factor.bias        = BIAS_BEARISH;
             factor.score       = -0.80;
-            factor.description = StringFormat("FVG: Bearish Imbalance Dominance (%d unfilled)", 
-                                             context.fairValueGaps.unfilledBearishFvgCount);
+            factor.description = StringFormat("FVG: Bearish Imbalance Dominance (%d unfilled)", bearishFVG);
          }
          else
          {
@@ -163,23 +176,17 @@ public:
          factor.source = EVIDENCE_SESSION;
          factor.weight = config.sessionWeight;
 
-         if(context.session.directionalBias > 0.1)
+         if(context.session.currentSession == SESSION_LONDON || context.session.currentSession == SESSION_NEW_YORK)
          {
             factor.bias        = BIAS_BULLISH;
-            factor.score       = context.session.directionalBias;
-            factor.description = "Session: Bullish Session Expansion Bias";
-         }
-         else if(context.session.directionalBias < -0.1)
-         {
-            factor.bias        = BIAS_BEARISH;
-            factor.score       = context.session.directionalBias;
-            factor.description = "Session: Bearish Session Expansion Bias";
+            factor.score       = 0.6;
+            factor.description = "Session: Active Major Killzone Session";
          }
          else
          {
             factor.bias        = BIAS_NEUTRAL;
             factor.score       = 0.0;
-            factor.description = "Session: Neutral Session Volatility";
+            factor.description = "Session: Neutral Session State";
          }
 
          factor.confidence = (context.features.sessionWeight.confidence > 0.0) ? 
@@ -196,13 +203,13 @@ public:
          factor.source = EVIDENCE_MARKET_STATE;
          factor.weight = config.stateWeight;
 
-         if(context.state.stateType == 1) // TRENDING_BULLISH
+         if(context.state.currentState == STATE_ENV_TRENDING_BULLISH || context.state.currentState == STATE_ENV_EXPANSION)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 0.85;
-            factor.description = "Market State: Bullish Trending Regime";
+            factor.description = "Market State: Bullish Trending/Expansion Regime";
          }
-         else if(context.state.stateType == 2) // TRENDING_BEARISH
+         else if(context.state.currentState == STATE_ENV_TRENDING_BEARISH)
          {
             factor.bias        = BIAS_BEARISH;
             factor.score       = -0.85;
@@ -229,24 +236,17 @@ public:
          factor.source = EVIDENCE_VOLUME;
          factor.weight = config.volumeWeight;
 
-         double deltaVolume = context.features.buyingPressure.normalizedValue - context.features.sellingPressure.normalizedValue;
-         if(deltaVolume > 0.15)
+         if(context.volume.relativeVolume > 1.2)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 0.75;
-            factor.description = "Volume: Dominant Buying Pressure";
-         }
-         else if(deltaVolume < -0.15)
-         {
-            factor.bias        = BIAS_BEARISH;
-            factor.score       = -0.75;
-            factor.description = "Volume: Dominant Selling Pressure";
+            factor.description = "Volume: High Relative Volume Expansion";
          }
          else
          {
             factor.bias        = BIAS_NEUTRAL;
             factor.score       = 0.0;
-            factor.description = "Volume: Neutral Buying/Selling Volume";
+            factor.description = "Volume: Normal Volume Activity";
          }
 
          factor.confidence = (context.features.volumeStrength.confidence > 0.0) ? 
@@ -263,23 +263,23 @@ public:
          factor.source = EVIDENCE_ORDER_FLOW;
          factor.weight = config.orderFlowWeight;
 
-         if(context.orderFlow.delta > 0.1)
+         if(context.orderFlow.buyingPressure > context.orderFlow.sellingPressure + 10.0)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 0.80;
-            factor.description = "Order Flow: Net Aggressive Buying Delta";
+            factor.description = "Order Flow: Dominant Buying Pressure";
          }
-         else if(context.orderFlow.delta < -0.1)
+         else if(context.orderFlow.sellingPressure > context.orderFlow.buyingPressure + 10.0)
          {
             factor.bias        = BIAS_BEARISH;
             factor.score       = -0.80;
-            factor.description = "Order Flow: Net Aggressive Selling Delta";
+            factor.description = "Order Flow: Dominant Selling Pressure";
          }
          else
          {
             factor.bias        = BIAS_NEUTRAL;
             factor.score       = 0.0;
-            factor.description = "Order Flow: Balanced Order Flow Imbalance";
+            factor.description = "Order Flow: Balanced Pressure";
          }
 
          factor.confidence = 0.75;

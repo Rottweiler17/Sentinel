@@ -26,30 +26,30 @@ public:
       context.timestamp = TimeCurrent();
 
       // Populate Snapshots across all analytical modules
-      context.marketData.high   = 2450.50;
-      context.marketData.low    = 2435.20;
-      context.marketData.close  = 2448.10;
+      context.marketData.currentCandle.high   = 2450.50;
+      context.marketData.currentCandle.low    = 2435.20;
+      context.marketData.currentCandle.close  = 2448.10;
 
-      context.structure.trend = 1;                              // Bullish Trend
-      context.liquidity.sellSideSweepActive = true;            // SSL Sweep Active
-      context.zones.activeZoneCount = 2;                       // 2 Active Zones
-      context.orderBlocks.activeBullishObCount = 2;            // 2 Bullish OBs
-      context.fairValueGaps.unfilledBullishFvgCount = 1;       // 1 Active Bullish FVG
-      context.session.sessionType = 2;                         // LONDON Session
-      context.state.stateType = 1;                              // TRENDING Regime
-      context.features.volumeStrength.normalizedValue = 0.85;  // High Volume
-      context.features.buyingPressure.normalizedValue = 0.75;
-      context.orderFlow.delta = 0.50;                           // Net Buying Delta
-      context.confluence.overallConfluenceScore = 0.82;        // High Confluence
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
+      context.zones.activeZonesCount = 2;
+      context.orderBlocks.activeBlocksCount = 2;
+      context.fairValueGaps.activeGapsCount = 1;
+      context.session.currentSession = SESSION_LONDON;
+      context.state.currentState = STATE_ENV_TRENDING_BULLISH;
+      context.volume.relativeVolume = 1.5;
+      context.orderFlow.buyingPressure = 75.0;
+      context.orderFlow.sellingPressure = 25.0;
+      context.confluence.overallConfluenceScore = 0.82;
       context.confluence.alignmentScore = 0.88;
       context.confluence.conflictScore = 0.05;
-      context.decisions.compositeScore = 0.78;
+      context.decisions.overallScore = 0.78;
       context.decisions.confidence = 0.85;
 
       Print("[1. XAUUSD CONTEXT SIMULATION] Loaded XAUUSD H1 MarketContext");
-      Print("  - Market Structure: Bullish (High: 2450.50, Low: 2435.20)");
-      Print("  - Liquidity: Sell-Side Sweep (SSL) Active");
-      Print("  - Order Blocks: 2 Bullish OBs | FVG: 1 Unfilled Bullish Gap");
+      Print("  - Market Structure: External Bullish Trend (High: 2450.50, Low: 2435.20)");
+      Print("  - Liquidity: Bullish Sweep Active");
+      Print("  - Order Blocks: 2 Active OBs | FVG: 1 Active FVG");
       Print("  - Confluence Score: +0.82 (Alignment: 0.88, Conflict: 0.05)");
 
       // 2. Instantiate VisualizationEngine
@@ -87,9 +87,9 @@ public:
       for(int seq = 101; seq <= 103; seq++)
       {
          context.sequenceNumber = seq;
-         context.marketData.close += 1.50;
+         context.marketData.currentCandle.close += 1.50;
          engine.Render(context);
-         Print(StringFormat("  - Replay Step %d Rendered (Close: %.2f)", seq, context.marketData.close));
+         Print(StringFormat("  - Replay Step %d Rendered (Close: %.2f)", seq, context.marketData.currentCandle.close));
       }
 
       Print("----------------------------------------------------------------------");

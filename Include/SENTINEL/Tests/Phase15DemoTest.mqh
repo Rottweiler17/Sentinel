@@ -25,25 +25,23 @@ public:
       context.timestamp = TimeCurrent();
 
       // Setup Analytical Components
-      context.structure.trend = 1;                              // Bullish Market Structure
-      context.liquidity.sellSideSweepActive = true;            // Bullish Liquidity Sweep
-      context.orderBlocks.activeBullishObCount = 2;            // Active Bullish OBs
-      context.fairValueGaps.unfilledBullishFvgCount = 2;       // Active Bullish FVGs
-      context.session.directionalBias = 0.5;                   // Bullish Session Bias
-      context.state.stateType = 1;                              // Bullish Trending Regime
-      context.features.buyingPressure.normalizedValue = 0.8;   // High Buying Volume
-      context.features.sellingPressure.normalizedValue = 0.2;  
-      context.orderFlow.delta = 0.45;                           // Positive Cumulative Delta
+      context.structure.externalTrend = TREND_BULLISH;
+      context.liquidity.sweepDirection = SWEEP_BULLISH;
+      context.orderBlocks.activeBlocksCount = 2;
+      context.fairValueGaps.activeGapsCount = 2;
+      context.session.currentSession = SESSION_LONDON;
+      context.state.currentState = STATE_ENV_TRENDING_BULLISH;
+      context.orderFlow.buyingPressure = 80.0;
+      context.orderFlow.sellingPressure = 20.0;
 
       Print("[INPUT] Aggregating Analytical Evidence across 8 Modules...");
       Print("  - Market Structure: Bullish");
-      Print("  - Liquidity: Sell-Side Sweep Active");
-      Print("  - Order Blocks: 2 Active Bullish OBs");
-      Print("  - FVG: 2 Unfilled Bullish Gaps");
-      Print("  - Session: Bullish Bias (+0.50)");
+      Print("  - Liquidity: Bullish Sweep Reaction");
+      Print("  - Order Blocks: 2 Active OBs");
+      Print("  - FVG: 2 Active FVGs");
+      Print("  - Session: London Killzone");
       Print("  - Market State: Bullish Trending");
-      Print("  - Volume: Buying Delta (0.80 vs 0.20)");
-      Print("  - Order Flow: Net Aggressive Buying Delta (+0.45)");
+      Print("  - Order Flow: Buying Pressure 80%");
 
       // 2. Instantiate and run ConfluenceEngine
       CConfluenceEngine engine;
