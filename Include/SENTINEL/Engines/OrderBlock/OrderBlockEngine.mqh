@@ -18,7 +18,7 @@
 
 /// @class COrderBlockEngine
 /// @brief Master Order Block Engine. Discovers, validates, and updates order block zones.
-class COrderBlockEngine : public CBaseEngine, public IOrderBlockEngine, public IEventListener
+class COrderBlockEngine : public CBaseEngine, public IEventListener
 {
 private:
    COrderBlockConfiguration m_config;
@@ -67,7 +67,7 @@ public:
    }
 
    /// @brief Primary pipeline updates.
-   virtual void ProcessOrderBlocks(const SMarketContext &context) override
+   virtual void ProcessOrderBlocks(const SMarketContext &context)
    {
       if(!m_isEnabled || context.marketData.bid <= 0.0) return;
 
@@ -131,5 +131,14 @@ public:
       m_lastSnapshotId = newSnapshotId;
    }
 
-   virtual const SOrderBlockSnapshot* GetSnapshot() const override { return &m_currentSnapshot; }
+   virtual bool GetSnapshot(SOrderBlockSnapshot &snapshot) const
+   {
+      snapshot = m_currentSnapshot;
+      return true;
+   }
+
+   virtual SOrderBlockSnapshot GetSnapshot() const
+   {
+      return m_currentSnapshot;
+   }
 };

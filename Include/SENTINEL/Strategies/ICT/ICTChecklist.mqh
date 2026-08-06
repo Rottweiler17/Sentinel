@@ -82,7 +82,7 @@ public:
       // 5. Session / Killzone Alignment
       conditions[(int)ICT_COND_KILLZONE_SESSION].condition = ICT_COND_KILLZONE_SESSION;
       conditions[(int)ICT_COND_KILLZONE_SESSION].weight    = 0.80;
-      if(context.session.currentSession == SESSION_LONDON || context.session.currentSession == SESSION_NEW_YORK)
+      if(context.session.currentSession == SESSION_MKT_LONDON || context.session.currentSession == SESSION_MKT_NEWYORK)
       {
          conditions[(int)ICT_COND_KILLZONE_SESSION].satisfied   = true;
          conditions[(int)ICT_COND_KILLZONE_SESSION].score       = 0.80;

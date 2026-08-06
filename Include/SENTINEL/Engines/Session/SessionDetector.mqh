@@ -21,39 +21,39 @@ public:
 
       // 1. London - New York Overlap (usually 13:00 to 16:00 GMT depending on offset)
       if(hour >= config.NewYorkStart() && hour < config.LondonEnd())
-         return SESSION_OVERLAP_LDN_NY;
+         return SESSION_MKT_OVERLAP_LDN_NY;
 
       // 2. Asian - London Overlap
       if(hour >= config.LondonStart() && hour < config.AsianEnd())
-         return SESSION_OVERLAP_ASIA_LDN;
+         return SESSION_MKT_OVERLAP_ASIA_LDN;
 
       // 3. New York Session
       if(hour >= config.NewYorkStart() || hour < config.NewYorkEnd())
       {
          if(config.NewYorkStart() < config.NewYorkEnd())
          {
-            if(hour >= config.NewYorkStart() && hour < config.NewYorkEnd()) return SESSION_NEWYORK;
+            if(hour >= config.NewYorkStart() && hour < config.NewYorkEnd()) return SESSION_MKT_NEWYORK;
          }
          else
          {
-            if(hour >= config.NewYorkStart() || hour < config.NewYorkEnd()) return SESSION_NEWYORK;
+            if(hour >= config.NewYorkStart() || hour < config.NewYorkEnd()) return SESSION_MKT_NEWYORK;
          }
       }
 
       // 4. London Session
       if(hour >= config.LondonStart() && hour < config.LondonEnd())
-         return SESSION_LONDON;
+         return SESSION_MKT_LONDON;
 
       // 5. Asian Session
       if(hour >= config.AsianStart() && hour < config.AsianEnd())
-         return SESSION_ASIAN;
+         return SESSION_MKT_ASIAN;
 
       // 6. Sydney Session
       if(hour >= config.SydneyStart() || hour < config.SydneyEnd())
       {
          if(config.SydneyStart() < config.SydneyEnd())
          {
-            if(hour >= config.SydneyStart() && hour < config.SydneyEnd()) return SESSION_SYDNEY;
+            if(hour >= config.SydneyStart() && hour < config.SydneyEnd()) return SESSION_MKT_SYDNEY;
          }
          else
          {
@@ -61,6 +61,6 @@ public:
          }
       }
 
-      return SESSION_UNKNOWN;
+      return SESSION_MKT_UNKNOWN;
    }
 };

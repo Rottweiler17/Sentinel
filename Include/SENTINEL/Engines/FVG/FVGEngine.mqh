@@ -18,7 +18,7 @@
 
 /// @class CFVGEngine
 /// @brief Master FVG Engine. Tracks 3-candle histories, detects imbalances, and calculates fill lifecycles.
-class CFVGEngine : public CBaseEngine, public IFVGEngine, public IEventListener
+class CFVGEngine : public CBaseEngine, public IEventListener
 {
 private:
    CFVGConfiguration m_config;
@@ -75,7 +75,7 @@ public:
    }
 
    /// @brief Primary pipeline updates.
-   virtual void ProcessFVGs(const SMarketContext &context) override
+   virtual void ProcessFVGs(const SMarketContext &context)
    {
       if(!m_isEnabled || context.marketData.bid <= 0.0) return;
 
@@ -98,11 +98,13 @@ public:
             if(CFVGDetector::Detect(m_barHistory[0], m_barHistory[1], m_barHistory[2], context, m_config, newGap))
             {
                if(CFVGValidator::IsValidGap(newGap))
+               {
                   m_repository.Add(newGap);
                   m_stats.RecordDetection();
 
                   if(m_eventBusRef != NULL)
                      m_eventBusRef.Publish(CFVGEvents::CreateCreatedEvent(newGap, context.marketData.time));
+               }
             }
          }
       }
@@ -153,5 +155,14 @@ public:
       m_lastSnapshotId = newSnapshotId;
    }
 
-   virtual const SFVGSnapshot* GetSnapshot() const override { return &m_currentSnapshot; }
+   virtual bool GetSnapshot(SFVGSnapshot &snapshot) const
+   {
+      snapshot = m_currentSnapshot;
+      return true;
+   }
+
+   virtual SFVGSnapshot GetSnapshot() const
+   {
+      return m_currentSnapshot;
+   }
 };

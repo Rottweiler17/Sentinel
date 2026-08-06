@@ -97,8 +97,6 @@ public:
       CSentinelAppLogger::LogInitSubsystem("14. Decision Framework", true, 0.18);
 
       // 15. Order Block & FVG Modules
-      m_orderBlockEngine.Reset();
-      m_fvgEngine.Reset();
       CSentinelAppLogger::LogInitSubsystem("15. OB & FVG Modules", true, 0.22);
 
       // 16. Developer Visualization Toolkit
@@ -134,7 +132,7 @@ public:
       // 2. Evaluate Analytical Engines
       m_context.structure.externalTrend = TREND_BULLISH;
       m_context.liquidity.sweepDirection = SWEEP_BULLISH;
-      m_context.session.currentSession = SESSION_LONDON;
+      m_context.session.currentSession = SESSION_MKT_LONDON;
       m_context.state.currentState = STATE_ENV_TRENDING_BULLISH;
 
       // 3. Evaluate Confluence Engine
@@ -169,8 +167,8 @@ public:
          CSentinelAppLogger::Log(LOG_CAT_RUNTIME, "Shutting down Sentinel Developer Application...");
          m_visualizationEngine.Purge();
          m_confluenceEngine.Reset();
-         m_orderBlockEngine.Reset();
-         m_fvgEngine.Reset();
+         m_orderBlockEngine.Shutdown();
+         m_fvgEngine.Shutdown();
          m_context.Reset();
          m_initialized = false;
          CSentinelAppLogger::Log(LOG_CAT_RUNTIME, "Shutdown Complete.");

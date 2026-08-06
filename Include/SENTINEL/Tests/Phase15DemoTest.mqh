@@ -29,7 +29,7 @@ public:
       context.liquidity.sweepDirection = SWEEP_BULLISH;
       context.orderBlocks.activeBlocksCount = 2;
       context.fairValueGaps.activeGapsCount = 2;
-      context.session.currentSession = SESSION_LONDON;
+      context.session.currentSession = SESSION_MKT_LONDON;
       context.state.currentState = STATE_ENV_TRENDING_BULLISH;
       context.orderFlow.buyingPressure = 80.0;
       context.orderFlow.sellingPressure = 20.0;

@@ -33,7 +33,7 @@ struct SSessionSnapshot
       snapshotId       = 0;
       parentId         = 0;
       sequenceNumber   = 0;
-      currentSession   = SESSION_UNKNOWN;
+      currentSession   = SESSION_MKT_UNKNOWN;
       sessionOpenTime  = 0;
       sessionCloseTime = 0;
       elapsedSeconds   = 0;

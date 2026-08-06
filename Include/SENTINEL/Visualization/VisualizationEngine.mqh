@@ -36,7 +36,7 @@ public:
    }
 
    /// @brief Initializes chart canvas ID.
-   virtual void Initialize(long chartId) override
+   virtual void Initialize(long chartId)
    {
       m_chartId = chartId;
       m_renderingManager.Initialize(chartId);
@@ -44,7 +44,7 @@ public:
    }
 
    /// @brief Main execution entrypoint rendering snapshots onto chart.
-   virtual bool Render(const SMarketContext &context) override
+   virtual bool Render(const SMarketContext &context)
    {
       if(m_chartId == 0) m_chartId = ChartID();
 
@@ -69,32 +69,32 @@ public:
    }
 
    /// @brief Retrieves current configuration settings.
-   virtual SVisualizationConfiguration GetConfiguration() const override
+   virtual SVisualizationConfiguration GetConfiguration() const
    {
       return m_config;
    }
 
    /// @brief Updates configuration settings.
-   virtual void SetConfiguration(const SVisualizationConfiguration &config) override
+   virtual void SetConfiguration(const SVisualizationConfiguration &config)
    {
       m_config = config;
    }
 
    /// @brief Retrieves current visualization state snapshot.
-   virtual SVisualizationSnapshot GetSnapshot() const override
+   virtual SVisualizationSnapshot GetSnapshot() const
    {
       return m_snapshot;
    }
 
    /// @brief Enables or disables a specific rendering layer.
-   virtual void SetLayerVisible(ENUM_VISUALIZATION_LAYER layer, bool visible) override
+   virtual void SetLayerVisible(ENUM_VISUALIZATION_LAYER layer, bool visible)
    {
       m_renderingManager.GetLayerManager().SetLayerVisible(layer, visible);
       m_config.overlayEnabled[(int)layer] = visible;
    }
 
    /// @brief Toggles Validation Mode.
-   virtual void SetValidationMode(bool active) override
+   virtual void SetValidationMode(bool active)
    {
       m_validationOverlay.SetActive(active);
       m_config.enableValidationMode = active;
@@ -107,7 +107,7 @@ public:
    }
 
    /// @brief Clears and purges chart objects.
-   virtual void Purge() override
+   virtual void Purge()
    {
       m_renderingManager.Purge();
       m_snapshot.Reset();

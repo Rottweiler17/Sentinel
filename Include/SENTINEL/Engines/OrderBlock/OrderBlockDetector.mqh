@@ -1,28 +1,31 @@
 //+------------------------------------------------------------------+
-//|                                             OrderBlockDetector.mqh |
+//|                                          OrderBlockDetector.mqh |
 //|                                                 Project SENTINEL |
 //+------------------------------------------------------------------+
 #property strict
 
-#include "../../Framework/Context/MarketContext.mqh"
 #include "OrderBlockTypes.mqh"
 #include "OrderBlockConfiguration.mqh"
+#include "../../Framework/Context/MarketContext.mqh"
 
 /// @class COrderBlockDetector
-/// @brief Scans swings and market context parameters to discover order block candidates.
+/// @brief Discovers high-probability Order Blocks based on market structure breaks & volume validation.
 class COrderBlockDetector
 {
 private:
    static ulong m_idSeq;
 
 public:
-   static bool Detect(const SMarketContext &context, const COrderBlockConfiguration &config, SOrderBlock &outBlock)
+   /// @brief Scans MarketContext for new Order Block formations.
+   static bool Detect(const SMarketContext &context,
+                      const COrderBlockConfiguration &config,
+                      SOrderBlock &outBlock)
    {
       // Safe fallback checks
       if(context.structure.latestSwingHigh.price <= 0.0) return false;
 
       // Detect potential block when a Structure event (like BOS) occurs with high volume confirmation
-      if(context.structure.latestBOS.type != SWING_TYPE_NONE && context.volume.volumeState == VOLUME_STATE_SPIKE)
+      if(context.structure.latestBOS.type != BREAK_NONE && context.volume.volumeState == VOLUME_STATE_SPIKE)
       {
          m_idSeq++;
          outBlock.id = m_idSeq;
@@ -31,7 +34,7 @@ public:
          outBlock.retestCount = 0;
          outBlock.isMitigated = false;
 
-         if(context.structure.latestBOS.type == SWING_TYPE_HIGH) // Bullish BOS -> Bullish OB (demand zone)
+         if(context.structure.latestBOS.type == BREAK_BOS_BULLISH) // Bullish BOS -> Bullish OB (demand zone)
          {
             outBlock.direction  = ORDERBLOCK_BULLISH;
             outBlock.lowerPrice = context.structure.latestSwingLow.price;
@@ -42,7 +45,7 @@ public:
             outBlock.freshness  = 100.0;
             return true;
          }
-         else if(context.structure.latestBOS.type == SWING_TYPE_LOW) // Bearish BOS -> Bearish OB (supply zone)
+         else if(context.structure.latestBOS.type == BREAK_BOS_BEARISH) // Bearish BOS -> Bearish OB (supply zone)
          {
             outBlock.direction  = ORDERBLOCK_BEARISH;
             outBlock.upperPrice = context.structure.latestSwingHigh.price;

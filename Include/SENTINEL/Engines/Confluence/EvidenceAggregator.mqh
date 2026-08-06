@@ -176,7 +176,7 @@ public:
          factor.source = EVIDENCE_SESSION;
          factor.weight = config.sessionWeight;
 
-         if(context.session.currentSession == SESSION_LONDON || context.session.currentSession == SESSION_NEW_YORK)
+         if(context.session.currentSession == SESSION_MKT_LONDON || context.session.currentSession == SESSION_MKT_NEWYORK)
          {
             factor.bias        = BIAS_BULLISH;
             factor.score       = 0.6;

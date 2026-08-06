@@ -10,11 +10,9 @@
 
 /// @interface IVisualizationEngine
 /// @brief Contract interface for Developer Visualization Engine implementations.
-class IVisualizationEngine
+interface IVisualizationEngine
 {
 public:
-   virtual ~IVisualizationEngine() {}
-
    virtual void                         Initialize(long chartId) = 0;
    virtual bool                         Render(const SMarketContext &context) = 0;
    virtual SVisualizationConfiguration  GetConfiguration() const = 0;

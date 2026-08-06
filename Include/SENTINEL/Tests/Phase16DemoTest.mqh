@@ -35,7 +35,7 @@ public:
       context.zones.activeZonesCount = 2;
       context.orderBlocks.activeBlocksCount = 2;
       context.fairValueGaps.activeGapsCount = 1;
-      context.session.currentSession = SESSION_LONDON;
+      context.session.currentSession = SESSION_MKT_LONDON;
       context.state.currentState = STATE_ENV_TRENDING_BULLISH;
       context.volume.relativeVolume = 1.5;
       context.orderFlow.buyingPressure = 75.0;

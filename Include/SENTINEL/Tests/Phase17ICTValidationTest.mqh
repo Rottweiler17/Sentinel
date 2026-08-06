@@ -41,7 +41,7 @@ private:
       context.liquidity.sweepDirection = SWEEP_BULLISH;
       context.orderBlocks.activeBlocksCount = 2;
       context.fairValueGaps.activeGapsCount = 1;
-      context.session.currentSession = SESSION_LONDON;
+      context.session.currentSession = SESSION_MKT_LONDON;
       context.state.currentState = STATE_ENV_TRENDING_BULLISH;
       context.confluence.overallConfluenceScore = 0.75;
       context.confluence.alignmentScore = 0.80;
@@ -79,7 +79,7 @@ private:
       context.liquidity.sweepDirection = SWEEP_BULLISH;
       context.orderBlocks.activeBlocksCount = 1;
       context.fairValueGaps.activeGapsCount = 1;
-      context.session.currentSession = SESSION_LONDON;
+      context.session.currentSession = SESSION_MKT_LONDON;
       context.state.currentState = STATE_ENV_TRENDING_BULLISH;
       context.confluence.overallConfluenceScore = 0.80;
       context.confluence.alignmentScore = 0.85;
