@@ -23,5 +23,6 @@ public:
                               const SOrderFlowSnapshot &orderFlowSnap,
                               const SFeatureSnapshot &featuresSnap,
                               const SDecisionSnapshot &decisionsSnap,
-                              const SOrderBlockSnapshot &orderBlocksSnap) = 0;
+                              const SOrderBlockSnapshot &orderBlocksSnap,
+                              const SFVGSnapshot &fvgsSnap) = 0;
 };

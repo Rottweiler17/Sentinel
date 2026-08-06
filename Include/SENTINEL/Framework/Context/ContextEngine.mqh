@@ -56,7 +56,8 @@ public:
                               const SOrderFlowSnapshot &orderFlowSnap,
                               const SFeatureSnapshot &featuresSnap,
                               const SDecisionSnapshot &decisionsSnap,
-                              const SOrderBlockSnapshot &orderBlocksSnap) override
+                              const SOrderBlockSnapshot &orderBlocksSnap,
+                              const SFVGSnapshot &fvgsSnap) override
    {
       if(!m_isEnabled) return;
 
@@ -76,6 +77,7 @@ public:
                            .AddFeatures(featuresSnap)
                            .AddDecisions(decisionsSnap)
                            .AddOrderBlocks(orderBlocksSnap)
+                           .AddFVGs(fvgsSnap)
                            .Build();
 
       // Validate context consistency

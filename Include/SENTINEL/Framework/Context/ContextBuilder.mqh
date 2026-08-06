@@ -92,6 +92,12 @@ public:
       return &this;
    }
 
+   CContextBuilder* AddFVGs(const SFVGSnapshot &fvgs)
+   {
+      m_context.fairValueGaps = fvgs;
+      return &this;
+   }
+
    SMarketContext Build()
    {
       return m_context;
