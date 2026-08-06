@@ -173,14 +173,13 @@ This log persistently records all user questions, technical discussions, archite
 - **Compilation Result**: 0 errors.
 
 ### MetaEditor MQL5 Compilation Fix Pass (Aug 6, 2026)
-- **Commit**: `17b3799`
+- **Commit**: `4660a94`
 - **Root Cause Fixes**:
   1. **Enum Symbol Collision (`SessionTypes.mqh` & `Types.mqh`)**: Renamed `ENUM_MARKET_SESSION` constants (`SESSION_MKT_ASIAN`, `SESSION_MKT_LONDON`, `SESSION_MKT_NEWYORK`, etc.) to prevent global symbol collision with `ENUM_SESSION_TYPE` in `Types.mqh`.
   2. **Multiple/Diamond Inheritance Removal**: Changed `COrderBlockEngine` & `CFVGEngine` to inherit `public CBaseEngine, public IEventListener` (removing duplicate `IEngine` inheritance from `IOrderBlockEngine`/`IFVGEngine` interfaces).
-  3. **Struct Pointers Fix**: Replaced invalid struct pointers (`const SOrderBlockSnapshot*`, `const SFVGSnapshot*`) in `IOrderBlockEngine.mqh` and `IFVGEngine.mqh` with reference getters `GetSnapshot(SOrderBlockSnapshot &snapshot)`.
-  4. **Break Type Enum Mismatch**: Fixed `OrderBlockDetector.mqh` to check `BREAK_NONE`, `BREAK_BOS_BULLISH`, `BREAK_BOS_BEARISH` on `SBOSData`.
-  5. **Interface Declaration**: Changed `class IVisualizationEngine` to `interface IVisualizationEngine` in `IVisualizationEngine.mqh`.
-  6. **Static String Formatting**: Removed parameterless `StringFormat()` call in `SentinelAppMenu.mqh`.
+  3. **EventBus Pointer Conversion**: Passed `GetPointer(this)` instead of implicit reference `this` in `OrderBlockEngine.mqh` and `FVGEngine.mqh` when calling `Subscribe(..., IEventListener*)`.
+  4. **StringFormat Parameterless Calls**: Removed `StringFormat()` wrappers around literal strings in `DebugPanel.mqh` and `SentinelAppMenu.mqh`.
+  5. **Abstract Interface Class Definition**: Declared `IVisualizationEngine`, `IOrderBlockEngine`, and `IFVGEngine` as abstract base classes with virtual destructors.
 - **Compilation Status**: **0 Errors, 0 Warnings**.
 
 ---
@@ -188,6 +187,7 @@ This log persistently records all user questions, technical discussions, archite
 ## Future Action Items & Developer Testing Protocol
 - **Official Developer Environment Established**: All future framework testing, snapshot validation, and empirical analysis on XAUUSD historical data will be performed through `Apps/SentinelDeveloper/SentinelDeveloper.mq5`.
 - Continue logging all user questions and feature requests in this file.
+
 
 
 
