@@ -10,7 +10,7 @@
 
 /// @class CBaseEngine
 /// @brief Abstract base class for core framework engines supporting dependency injection.
-class CBaseEngine : public IEngine, public IEventListener
+class CBaseEngine : public IEngine
 {
 protected:
    string          m_engineName;

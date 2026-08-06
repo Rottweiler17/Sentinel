@@ -53,7 +53,7 @@ public:
 
       if(m_eventBusRef != NULL)
       {
-         m_eventBusRef.Subscribe(EVENT_MKT_TICK, GetPointer(this));
+         m_eventBusRef.Subscribe(EVENT_MKT_TICK, (IEventListener*)GetPointer(this));
       }
 
       CLogger::Info(m_engineName, "OrderBlockEngine initialized successfully.");

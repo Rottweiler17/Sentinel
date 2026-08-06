@@ -12,20 +12,6 @@
 class CConfigEngine;
 class CEventBus;
 
-/// @interface IEngine
-/// @brief Core lifecycle contract implemented by all domain analytics engines.
-interface IEngine
-{
-   public:
-      virtual bool         Initialize(CConfigEngine *config, CEventBus *bus) = 0;
-      virtual void         OnTick(const MqlTick &tick) = 0;
-      virtual void         OnBar(const string symbol, ENUM_TIMEFRAMES tf) = 0;
-      virtual void         Shutdown() = 0;
-      virtual string       GetName() const = 0;
-      virtual bool         IsEnabled() const = 0;
-      virtual void         SetEnabled(bool enable) = 0;
-};
-
 /// @enum ENUM_SENTINEL_EVENT_TYPE
 /// @brief Categorized event types processed across system, market, trading, and UI layers.
 enum ENUM_SENTINEL_EVENT_TYPE
@@ -86,6 +72,20 @@ interface IEventListener
 {
    public:
       virtual void         OnEvent(const SSentinelEvent &event) = 0;
+};
+
+/// @interface IEngine
+/// @brief Core lifecycle contract implemented by all domain analytics engines.
+interface IEngine : public IEventListener
+{
+   public:
+      virtual bool         Initialize(CConfigEngine *config, CEventBus *bus) = 0;
+      virtual void         OnTick(const MqlTick &tick) = 0;
+      virtual void         OnBar(const string symbol, ENUM_TIMEFRAMES tf) = 0;
+      virtual void         Shutdown() = 0;
+      virtual string       GetName() const = 0;
+      virtual bool         IsEnabled() const = 0;
+      virtual void         SetEnabled(bool enable) = 0;
 };
 
 /// @interface IModule
