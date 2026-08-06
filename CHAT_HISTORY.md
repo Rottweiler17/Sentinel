@@ -63,8 +63,35 @@ This log persistently records all user questions, technical discussions, archite
 - **File Created**: `Include/SENTINEL/Tests/GoldenPipelineIntegrationTest.mqh`
 - **Verification**: End-to-end integration test connecting structure, session, orderflow, features, order blocks, FVG, and context engines into a single pipeline.
 
+### Phase 15: Confluence Engine (Aug 6, 2026)
+- **Files Created**:
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceTypes.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceSnapshot.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceEvents.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceConfiguration.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceStatistics.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceValidator.mqh`
+  - `Include/SENTINEL/Engines/Confluence/EvidenceAggregator.mqh`
+  - `Include/SENTINEL/Engines/Confluence/AlignmentAnalyzer.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConflictAnalyzer.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceCalculator.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceAnalyzer.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceCache.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceRepository.mqh`
+  - `Include/SENTINEL/Engines/Confluence/IConfluenceEngine.mqh`
+  - `Include/SENTINEL/Engines/Confluence/ConfluenceEngine.mqh`
+  - `Include/SENTINEL/Tests/Phase15ConfluenceTest.mqh`
+  - `Include/SENTINEL/Tests/Phase15DemoTest.mqh`
+  - `Phase_15_Confluence.md`
+- **Context Updates**:
+  - Added `SConfluenceSnapshot confluence;` field to `SMarketContext` in `MarketContext.mqh`.
+- **Capabilities**:
+  - Measures agreement and conflict across 8 independent analytical modules (Structure, Liquidity, Order Blocks, FVGs, Session, State, Volume, Order Flow).
+  - Strategy-independent, zero trade signals or MT5 API access.
+
 ---
 
 ## Future Action Items / Next Steps
+- **Upcoming Milestone**: Developer Chart Overlay Visualizer Tool (pause adding backend trading engines until internal overlay visualizer is complete).
 - Continue logging all user questions and feature requests in this file.
-- Next architectural steps or custom engine requirements as specified by the user.
+
