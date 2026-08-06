@@ -89,9 +89,40 @@ This log persistently records all user questions, technical discussions, archite
   - Measures agreement and conflict across 8 independent analytical modules (Structure, Liquidity, Order Blocks, FVGs, Session, State, Volume, Order Flow).
   - Strategy-independent, zero trade signals or MT5 API access.
 
+### Phase 16: Developer Visualization & Validation Toolkit (Aug 6, 2026)
+- **Files Created**:
+  - `Include/SENTINEL/Visualization/VisualizationTypes.mqh`
+  - `Include/SENTINEL/Visualization/VisualizationSnapshot.mqh`
+  - `Include/SENTINEL/Visualization/VisualizationConfiguration.mqh`
+  - `Include/SENTINEL/Visualization/ChartObjectManager.mqh`
+  - `Include/SENTINEL/Visualization/ObjectPoolRenderer.mqh`
+  - `Include/SENTINEL/Visualization/ThemeManager.mqh`
+  - `Include/SENTINEL/Visualization/LayerManager.mqh`
+  - `Include/SENTINEL/Visualization/OverlayManager.mqh`
+  - `Include/SENTINEL/Visualization/DebugPanel.mqh`
+  - `Include/SENTINEL/Visualization/PerformanceOverlay.mqh`
+  - `Include/SENTINEL/Visualization/ValidationModeOverlay.mqh`
+  - `Include/SENTINEL/Visualization/RenderingManager.mqh`
+  - `Include/SENTINEL/Visualization/VisualizationEvents.mqh`
+  - `Include/SENTINEL/Visualization/IVisualizationEngine.mqh`
+  - `Include/SENTINEL/Visualization/VisualizationEngine.mqh`
+  - `Include/SENTINEL/Tests/Phase16VisualizationTest.mqh`
+  - `Include/SENTINEL/Tests/Phase16DemoTest.mqh`
+  - `Phase_16_Developer_Visualization_Toolkit.md`
+- **Capabilities**:
+  - 100% read-only, decoupled developer chart overlay and snapshot validator.
+  - 10-layer independent toggle system (Price, Structure, Liquidity, Zones, OBs, FVGs, Sessions, Volume, Order Flow, Debug).
+  - High-performance object pool renderer (500 dynamic object capacity).
+  - Validation mode for inspecting all 14 snapshots on candle click.
+
 ---
 
-## Future Action Items / Next Steps
-- **Upcoming Milestone**: Developer Chart Overlay Visualizer Tool (pause adding backend trading engines until internal overlay visualizer is complete).
-- Continue logging all user questions and feature requests in this file.
+## Future Action Items & Developer Testing Protocol
+- **Historical Testing & Validation Phase**:
+  1. Run the visualization toolkit on XAUUSD (6–12 months of historical data).
+  2. Validate Structure, Liquidity, Order Blocks, FVGs, Confluence, and Decision outputs.
+  3. Fix any empirical inaccuracies on live charts.
+  4. Only then begin building strategy packs (ICT, SMC, Wyckoff) and execution engines.
+- **Roadmap Protocol**: AI automated roadmap generation is paused. Every future phase will come directly from developer empirical testing.
+
 
