@@ -4,7 +4,7 @@
 //+------------------------------------------------------------------+
 #property strict
 
-#include "../../Framework/Context/MarketContext.mqh"
+#include "../Framework/Context/MarketContext.mqh"
 #include "VisualizationConfiguration.mqh"
 #include "LayerManager.mqh"
 #include "ObjectPoolRenderer.mqh"
